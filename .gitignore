@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+
+# Flask
+instance/
+*.db
+*.sqlite3
+
+# Environment secrets
+.env
+
+# OS/editor junk
+.DS_Store
+.vscode/
+.idea/
