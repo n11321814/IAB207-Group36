@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
+/* qs- prefix to prevent clash with bootstrap classes */
+body.qs-body{
+  background-color: #16151a;
+  color: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.qs-heading{
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+/* Film strip divider */
+.qs-filmstrip{
+  height: 18px;
+  background-color: #661220;
+  background-image: radial-gradient(circle, #17161a 3px, transparent 3.2px);
+  background-size: 26px 18px;
+  background-position: 13px center;
+  border-top: 2px solid #cca116;
+  border-bottom: 2px solid #cca116;
+}
+
+.qs-thumb{
+  width: 60px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.qs-empty-state{
+  background-color: #29272e;
+  border: 1px dashed #534d5a;
+  border-radius: 0.5rem;
+}
+
+/* Nav bar*/
+.qs-navbar{
+  background-color: #1B1A1F;
+  border-bottom: 2px solid #6E1423;
+}
+.qs-navbar .navbar-brand{
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  color: #cca116 !important;
+}
+.qs-navbar .nav-link{
+  color: #F5F1E8 !important;
+}
+.qs-navbar .nav-link:hover,
+.qs-navbar .nav-link.active{
+  color: #cca116 !important;
+}
+
+/*marquee banner */
+.qs-hero{
+  background-color: #3a0d16;
+  background: -webkit-linear-gradient(180deg, #3a0d16 0%, #1a0611 100%);
+  background: linear-gradient(180deg, #3a0d16 0%, #1a0611 100%);
+  padding: 4.5rem 1rem 3.5rem;
+  text-align: center;
+}
+.qs-hero h1{
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  color: #cca116;
+  margin-bottom: 0.5rem;
+}
+.qs-hero p{
+  font-size: 1.15rem;
+  color: #F5F1E8;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Category filter */
+.qs-category-btn{
+  border: 1px solid #cca116;
+  color: #cca116;
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  font-size: 0.9rem;
+  margin: 0.25rem;
+}
+.qs-category-btn:hover,
+.qs-category-btn.active{
+  background-color: #cca116;
+  color: #1B1A1F;
+}
+
+/* Event card */
+.qs-card{
+  background-color: #2B2930;
+  border: 1px solid #4a4550;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  height: 100%;
+}
+.qs-card-img{
+  height: 190px;
+  object-fit: cover;
+  width: 100%;
+}
+.qs-card-body h5{
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.03em;
+  color: #F5F1E8;
+}
+.qs-card-meta{
+  font-size: 0.85rem;
+  color: #cec9bf;
+}
+
+/* Status badge  */
+.qs-badge{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+}
+.qs-badge-open{ background-color: #227e53; color: #d4f3e2; }
+.qs-badge-soldout{ background-color: #641522; color: #fcfbfb; }
+.qs-badge-inactive{ background-color: #3f3e3e; color: #d9d9d9; }
+.qs-badge-cancelled{ background-color: #130808; color: #ecacac; }
+
+/* Section headings */
+.qs-section-title{
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.05em;
+  color: #cca116;
+  margin-bottom: 1.5rem;
+}
+
+/* Forms */
+.qs-form-panel{
+  background-color: #3e3b44;
+  border: 1px solid #423d49;
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+.qs-form-panel label{
+  color: #fdfdfc;
+  font-weight: 500;
+}
+.qs-form-panel .form-control,
+.qs-form-panel .form-select{
+  background-color: #18171b;
+  border: 1px solid #726e68;
+  color: #fdfdfc;
+}
+.qs-form-panel .form-control:focus,
+.qs-form-panel .form-select:focus{
+  background-color: #1B1A1F;
+  color: #fdfdfc;
+  border-color: #cca116;
+}
+.qs-form-panel .form-text{
+  color: #a5a098;
+}
+
+/* Buttons */
+.qs-btn-gold{
+  background-color: #cca116;
+  border-color: #cca116;
+  color: #1B1A1F;
+  font-weight: 600;
+}
+.qs-btn-gold:hover{
+  background-color: #92730d;
+  border-color: #cca116;
+  color: #1B1A1F;
+}
+.qs-btn-outline-gold{
+  border: 1px solid #cca116;
+  color: #cca116;
+  background: transparent;
+}
+.qs-btn-outline-gold:hover{
+  background-color: #cca116;
+  color: #1B1A1F;
+}
+
+/* Comments */
+.qs-comment{
+  border-bottom: 1px solid #3a3640;
+  padding: 0.9rem 0;
+}
+.qs-comment strong{
+  color: #cca116;
+}
+.qs-comment-date{
+  font-size: 0.78rem;
+  color: #8b8883;
+}
+
+/* Footer */
+.qs-footer{
+  background-color: #1B1A1F;
+  border-top: 2px solid #6E1423;
+  padding: 2rem 0 1.5rem;
+  color: #c5c1b9;
+  font-size: 0.9rem;
+}
+.qs-footer a{
+  color: #cca116;
+  text-decoration: none;
+}
+.qs-footer a:hover{
+  text-decoration: underline;
+}
+
+/* Booking history table */
+.qs-table{
+  color: #fcfcfc;
+}
+.qs-table thead th{
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.04em;
+  color: #cca116;
+  border-bottom: 2px solid #7c1325;
+}
+.qs-table td, .qs-table th{
+  border-color: #3a3641;
+  vertical-align: middle;
+}
+
+.qs-breadcrumb{
+  --bs-breadcrumb-divider-color: #8f8880;
+}
+.qs-breadcrumb a{
+  color: #cca116;
+  text-decoration: none;
+}
+.qs-breadcrumb .breadcrumb-item.active{
+  color: #bbb7ae;
+}
+
+.qs-search-icon{
+  color: #cca116;
+}
+.qs-search-input{
+  background-color: #3a3641;
+  border-color: #8f8880;
+  color: #F5F1E8;
+}
+
+.qs-text-xs{
+  font-size: 0.78rem;
+}
+.qs-text-muted-warm{
+  color: #bbb7ae;
+}
+
+.qs-empty-icon{
+  font-size: 2.5rem;
+  color: #8f8880;
+}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulp Fiction - Quirky Screenings</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="static/style/style.css" rel="stylesheet">
+</head>
+<body class="qs-body">
+
+<header>
+  <nav class="navbar navbar-expand-lg qs-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Quirky Screenings</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="create-event.html">Create an Event</a></li>
+          <li class="nav-item"><a class="nav-link" href="bookings.html">My Bookings</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="qs-filmstrip"></div>
+</header>
+
+<main class="container py-5">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb qs-breadcrumb">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="index.html">Cult Classic</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pulp Fiction</li>
+    </ol>
+  </nav>
+
+  <div class="row g-5">
+
+    <div class="col-lg-7">
+      <img src="static/img/pulp-fiction.jpg" class="img-fluid rounded mb-4" alt="Pulp Fiction screening poster">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h1 class="qs-heading mb-0">Pulp Fiction</h1>
+        <span class="qs-badge qs-badge-open">Open</span>
+      </div>
+      <p class="qs-card-meta mb-4">Cult Classic - Rated MA15+ - 154 min - 35mm Print</p>
+
+      <h2 class="qs-section-title qs-heading h5">Synopsis</h2>
+      <p>A twisting, non-linear crime story following two hitmen, a boxer, and a gangster's wife across a handful of interlocking tales in Los Angeles. A defining film of 1990s cinema, presented here on a rare 35mm print for this one-off screening.</p>
+
+      <h2 class="qs-section-title qs-heading h5 mt-4">Details</h2>
+      <ul class="list-unstyled">
+        <li class="mb-2"><strong class="text-warning">Venue:</strong> Bayside Cinemas, 82 Berrima St, Wynnum QLD</li>
+        <li class="mb-2"><strong class="text-warning">Date & Time:</strong> Saturday 15 August 2026, 7:30pm – 9:15pm</li>
+        <li class="mb-2"><strong class="text-warning">Ticket Price:</strong> $18.00</li>
+        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> Enhanced - read in full before the screening</li>
+        <li class="mb-2"><strong class="text-warning">Organised by:</strong> nic_q</li>
+      </ul>
+
+      <div class="ratio ratio-16x9 mb-4">
+        <iframe src="https://www.google.com/maps?q=Bayside+Cinemas,+82+Berrima+St,+Wynnum+QLD&output=embed" style="border:0;" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <h2 class="qs-section-title qs-heading h5 mt-4">Comments</h2>
+      <div class="qs-comment">
+        <strong>filmgoer2</strong> <span class="qs-comment-date">- 2 Jul 2026</span>
+        <p class="mb-0 mt-1">Been trying to see this on a real print for years. So glad someone's finally doing this!</p>
+      </div>
+      <div class="qs-comment">
+        <strong>filmgoer1</strong> <span class="qs-comment-date">- 5 Jul 2026</span>
+        <p class="mb-0 mt-1">Is there parking near Bayside Cinemas on a Saturday night?</p>
+      </div>
+
+      <form class="mt-4">
+        <div class="mb-3">
+          <label for="commentText" class="form-label">Add a comment</label>
+          <textarea class="form-control" id="commentText" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn qs-btn-outline-gold">Post Comment</button>
+      </form>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="qs-form-panel text-center">
+        <h2 class="qs-heading h4 mb-3">Book Tickets</h2>
+        <p class="qs-card-meta mb-4">14 of 60 tickets remaining</p>
+        <button type="button" class="btn qs-btn-gold w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
+          Book Now
+        </button>
+      </div>
+
+      <p class="qs-card-meta mt-4 mb-2 qs-text-xs qs-text-muted-warm"><em>This panel changes depending on the event's status. For example:</em></p>
+
+      <div class="qs-form-panel mb-3 py-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="qs-badge qs-badge-soldout">Sold Out</span>
+          <p class="mb-0 qs-card-meta">This screening is sold out - all tickets have been claimed. Check back for future screenings of this film.</p>
+        </div>
+      </div>
+
+      <div class="qs-form-panel mb-3 py-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="qs-badge qs-badge-inactive">Inactive</span>
+          <p class="mb-0 qs-card-meta">This screening has already taken place. Bookings are closed for past events.</p>
+        </div>
+      </div>
+
+      <div class="qs-form-panel mb-3 py-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="qs-badge qs-badge-cancelled">Cancelled</span>
+          <p class="mb-0 qs-card-meta">This screening was cancelled by the organiser. Any tickets purchased have been automatically refunded.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content qs-form-panel">
+      <div class="modal-header border-0">
+        <h2 class="modal-title qs-heading h4" id="bookingModalLabel">Book Tickets - Pulp Fiction</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="alert alert-success d-flex align-items-start gap-2 mb-3" role="alert">
+          <i class="bi bi-check-circle-fill mt-1"></i>
+          <div>
+            <strong>Booking confirmed!</strong> Order #QS-10391 - 2 tickets for Pulp Fiction. A confirmation has been sent to your email.
+          </div>
+        </div>
+
+        <div class="alert alert-danger d-flex align-items-start gap-2 mb-3" role="alert">
+          <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+          <div>
+            <strong>Order cannot be placed.</strong> You requested more tickets than are available for this session.
+          </div>
+        </div>
+        <p class="qs-card-meta mb-3 qs-text-xs"><em>Example states shown above - a real booking would display only the relevant message.</em></p>
+
+        <form>
+          <div class="mb-3">
+            <label for="numTickets" class="form-label">Number of tickets</label>
+            <input type="number" class="form-control" id="numTickets" min="1" max="14" value="1">
+            <div class="form-text">Maximum 14 tickets available for this session.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Total</label>
+            <p class="fs-4 mb-0" id="ticketTotal">$18.00</p>
+          </div>
+          <button type="submit" class="btn qs-btn-gold w-100">Confirm Booking</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qs-filmstrip"></div>
+
+<footer class="qs-footer">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <p class="mb-2 mb-md-0"> 2026 Quirky Screenings.</p>
+    <div>
+      <a href="#" class="me-3">About Us</a>
+      <a href="#" class="me-3">Contact</a>
+      <a href="#" class="me-3">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
