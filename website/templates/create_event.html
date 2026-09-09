@@ -3,7 +3,7 @@
 
 {% block content %}
 <main class="container py-5">
-  <h1 class="qs-heading mb-3">Create a Screening</h1>
+  <h1 class="qs-heading mb-3">{{ 'Update Screening' if editing else 'Create a Screening' }}</h1>
 
   <div class="qs-form-panel">
     <form method="POST" novalidate>
@@ -107,4 +107,34 @@
     </form>
   </div>
 </main>
+
+      {{ form.submit(class="btn qs-btn-gold px-4", value=('Update Event' if editing else 'Publish Event')) }}
+
+      {% if editing %}
+      <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal" data-bs-target="#cancelEventModal">
+        Cancel Event
+      </button>
+      {% endif %}
+    </form>
+  </div>
+</main>
+
+{% if editing %}
+<div class="modal fade" id="cancelEventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content qs-form-panel">
+      <div class="modal-header border-0">
+        <h2 class="modal-title qs-heading h5">Cancel this screening?</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>This will mark the event as Cancelled and disable new bookings.</p>
+        <form method="POST" action="{{ url_for('main.cancel_event', event_id=event.id) }}">
+          <button type="submit" class="btn btn-danger w-100">Confirm Cancellation</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
