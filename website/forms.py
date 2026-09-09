@@ -59,6 +59,11 @@ class EventForm(FlaskForm):
         validators=[InputRequired()]
     )
 
+    # Acknowledgement of Country guidance informed by:
+    # - Reconciliation Australia's protocol guidance on Acknowledgement of Country
+    # - AIATSIS Map of Indigenous Australia (aiatsis.gov.au/explore/map-indigenous-australia)
+    # - Shelley Reys, "Deliver an Acknowledgement of Country that really means
+    #   something" (TEDxSydney) — linked in the A2 brief
     acknowledgement_text = TextAreaField(
         'Your Enhanced Acknowledgement (only used if "Enhanced" is selected above)',
         validators=[Optional(), Length(max=1500)]
