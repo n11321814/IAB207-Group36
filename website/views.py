@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from . import db
 from .models import Event, Venue, Category
 from .forms import EventForm
+
 
 main_bp = Blueprint('main', __name__)
 
@@ -50,3 +51,59 @@ def create_event():
         return redirect(url_for('main.index'))
 
     return render_template('create_event.html', form=form)
+
+@main_bp.route('/event/<int:event_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    if event.organiser_id != current_user.id:
+        abort(403)
+
+    form = EventForm(obj=event)
+
+    if not form.is_submitted():
+        form.venue_name.data = event.venue.name
+        form.venue_address.data = event.venue.address
+        form.category.data = event.category_id
+
+    if form.validate_on_submit():
+        event.title = form.title.data
+        event.synopsis = form.synopsis.data
+        event.poster_image = form.poster_image.data
+        event.classification = form.classification.data
+        event.runtime = form.runtime.data
+        event.screening_format = form.screening_format.data
+        event.event_date = form.event_date.data
+        event.start_time = form.start_time.data
+        event.end_time = form.end_time.data
+        event.ticket_price = form.ticket_price.data
+        event.category_id = form.category.data
+        event.acknowledgement_type = form.acknowledgement_type.data
+        event.acknowledgement_text = (
+            form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None
+        )
+
+        event.venue.name = form.venue_name.data
+        event.venue.address = form.venue_address.data
+
+        db.session.commit()
+        flash('Event updated successfully.', 'success')
+        return redirect(url_for('main.index'))
+
+    return render_template('create_event.html', form=form, editing=True, event=event)
+
+
+@main_bp.route('/event/<int:event_id>/cancel', methods=['POST'])
+@login_required
+def cancel_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    if event.organiser_id != current_user.id:
+        abort(403)
+
+    event.status = 'Cancelled'
+    db.session.commit()
+
+    flash('Event has been cancelled.', 'info')
+    return redirect(url_for('main.index'))
