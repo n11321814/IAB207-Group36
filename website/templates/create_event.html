@@ -81,13 +81,26 @@
       </div>
 
       <h2 class="qs-heading h5 mb-3">Acknowledgement of Country</h2>
-      <div class="mb-4">
+      <div class="qs-form-panel mb-3 py-3 bg-opacity-25" style="background-color: rgba(204,161,22,0.08);">
+        <p class="mb-2"><strong>What's the difference?</strong> A <em>Welcome to Country</em> can only be delivered by a Traditional Owner or Elder of that specific land. An <em>Acknowledgement of Country</em> can be given by anyone, and is a statement of respect for the Traditional Custodians of the land an event takes place on.</p>
+        <p class="mb-2"><strong>Avoid common mistakes:</strong> a generic, copy-pasted line with no connection to the actual venue is the most common criticism of Acknowledgements. Naming the correct Traditional Owner group, and using "Traditional Owners/Custodians" rather than "landowners," are both simple ways to make yours genuine rather than tokenistic.</p>
+        <p class="mb-0">Not sure which group is connected to your venue's land? Check the <a href="https://aiatsis.gov.au/explore/map-indigenous-australia" target="_blank" class="qs-btn-outline-gold" style="text-decoration:underline;">AIATSIS Map of Indigenous Australia</a> before writing an Enhanced Acknowledgement below.</p>
+      </div>
+
+      <div class="mb-3">
         {% for subfield in form.acknowledgement_type %}
         <div class="form-check">
           {{ subfield(class="form-check-input") }}
           {{ subfield.label(class="form-check-label") }}
         </div>
         {% endfor %}
+      </div>
+
+      <div class="mb-4">
+        {{ form.acknowledgement_text.label(class="form-label") }}
+        {{ form.acknowledgement_text(class="form-control", rows=4, placeholder="e.g. Name the specific Traditional Owner group for your venue's location, and connect this screening to something concrete — a local Indigenous filmmaker, story, or cause — rather than a generic statement.") }}
+        {% for error in form.acknowledgement_text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        <div class="form-text">Only stored if "Enhanced Acknowledgement" is selected above. Aim for at least 40 words informed by real research into your venue's location.</div>
       </div>
 
       {{ form.submit(class="btn qs-btn-gold px-4") }}

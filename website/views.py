@@ -38,7 +38,7 @@ def create_event():
             ticket_price=form.ticket_price.data,
             tickets_available=form.tickets_available.data,
             tickets_remaining=form.tickets_available.data,
-            acknowledgement_type=form.acknowledgement_type.data,
+            acknowledgement_text=form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None,
             category_id=form.category.data,
             organiser_id=current_user.id,
             status='Open',

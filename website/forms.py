@@ -59,9 +59,29 @@ class EventForm(FlaskForm):
         validators=[InputRequired()]
     )
 
+    acknowledgement_text = TextAreaField(
+        'Your Enhanced Acknowledgement (only used if "Enhanced" is selected above)',
+        validators=[Optional(), Length(max=1500)]
+    )
+
     submit = SubmitField('Publish Event')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         from .models import Category
         self.category.choices = [(c.id, c.name) for c in Category.query.order_by('name')]
+
+    def validate(self, extra_validators=None):
+        if not super().validate(extra_validators=extra_validators):
+            return False
+
+        if self.acknowledgement_type.data == 'enhanced':
+            word_count = len(self.acknowledgement_text.data.split()) if self.acknowledgement_text.data else 0
+            if word_count < 40:
+                self.acknowledgement_text.errors.append(
+                    'An Enhanced Acknowledgement needs at least 40 words — '
+                    'this is meant to reflect real research, not a copied line.'
+                )
+                return False
+
+        return True
