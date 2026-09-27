@@ -2,6 +2,7 @@ from . import db
 from datetime import datetime
 from flask_login import UserMixin
 
+# inherits from db.Model and UserMixin to create a user model for the database
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(100), nullable=False)
