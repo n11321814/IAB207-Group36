@@ -10,7 +10,8 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    return '<h1>Starter code for assignment 3<h1>'
+    events = Event.query.order_by(Event.event_date).all()
+    return render_template('index.html', events=events)
 
 
 @main_bp.route('/event/create', methods=['GET', 'POST'])
@@ -39,6 +40,7 @@ def create_event():
             ticket_price=form.ticket_price.data,
             tickets_available=form.tickets_available.data,
             tickets_remaining=form.tickets_available.data,
+            acknowledgement_type=form.acknowledgement_type.data,
             acknowledgement_text=form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None,
             category_id=form.category.data,
             organiser_id=current_user.id,
@@ -51,6 +53,7 @@ def create_event():
         return redirect(url_for('main.index'))
 
     return render_template('create_event.html', form=form)
+
 
 @main_bp.route('/event/<int:event_id>/update', methods=['GET', 'POST'])
 @login_required
