@@ -1,6 +1,13 @@
+from datetime import date
+
 from flask_wtf import FlaskForm
-from wtforms.fields import SubmitField, StringField, PasswordField
-from wtforms.validators import InputRequired, Email, EqualTo
+from wtforms.fields import (
+    SubmitField, StringField, PasswordField, TextAreaField,
+    SelectField, IntegerField, FloatField, DateField, TimeField, RadioField
+)
+from wtforms.validators import (
+    InputRequired, Length, Email, EqualTo, NumberRange, Optional
+)
 
 # creates the login information
 class LoginForm(FlaskForm):
@@ -78,6 +85,11 @@ class EventForm(FlaskForm):
 
     def validate(self, extra_validators=None):
         if not super().validate(extra_validators=extra_validators):
+            return False
+
+        # event date must be in the future (per brief FAQ)
+        if self.event_date.data and self.event_date.data < date.today():
+            self.event_date.errors.append('Event date must be in the future.')
             return False
 
         if self.acknowledgement_type.data == 'enhanced':
