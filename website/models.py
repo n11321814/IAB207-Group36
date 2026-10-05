@@ -66,7 +66,7 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     created_on = db.Column(db.DateTime, default=datetime.utcnow)
-    created_on_local = db.Column(db.DateTime, default=datetime.now(ZoneInfo("Australia/Brisbane")))
+    created_on_local = db.Column(db.DateTime, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")))
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders')
