@@ -31,6 +31,7 @@ class RegisterForm(FlaskForm):
     # submit button
     submit = SubmitField("Register")
 
+# form for creating and updating an event, with server-side validation
 class EventForm(FlaskForm):
     title = StringField('Film title', validators=[InputRequired(), Length(max=150)])
     classification = SelectField(
@@ -78,11 +79,14 @@ class EventForm(FlaskForm):
 
     submit = SubmitField('Publish Event')
 
+    # category choices come from the database, so they are loaded when
+    # the form is created rather than when the file is imported
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         from .models import Category
         self.category.choices = [(c.id, c.name) for c in Category.query.order_by('name')]
 
+    # extra checks that the built-in validators can't do for us
     def validate(self, extra_validators=None):
         if not super().validate(extra_validators=extra_validators):
             return False
