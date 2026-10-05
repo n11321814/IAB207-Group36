@@ -1,6 +1,7 @@
 from . import db
 from datetime import datetime
 from flask_login import UserMixin
+from zoneinfo import ZoneInfo
 
 # inherits from db.Model and UserMixin to create a user model for the database
 class User(db.Model, UserMixin):
@@ -50,6 +51,17 @@ class Comment(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
+    quantity = db.Column(db.Integer, nullable=False)
+
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
+    created_on_local = db.Column(db.DateTime, default=datetime.now(ZoneInfo("Australia/Brisbane")))
+
+    event = db.relationship('Event', backref='orders')
+    user = db.relationship('User', backref='orders')
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
