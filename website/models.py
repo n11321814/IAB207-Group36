@@ -12,15 +12,16 @@ class User(db.Model, UserMixin):
     contact_number = db.Column(db.String(20), nullable=False)
     street_address = db.Column(db.String(200), nullable=False)
 
+# an event is a single film screening created by a user (the organiser)
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     title = db.Column(db.String(150), nullable=False)
     synopsis = db.Column(db.Text, nullable=False)
-    poster_image = db.Column(db.String(300))
-    classification = db.Column(db.String(10), nullable=False)
-    runtime = db.Column(db.Integer, nullable=False)
-    screening_format = db.Column(db.String(30))
+    poster_image = db.Column(db.String(300))  # optional, just a URL to an image
+    classification = db.Column(db.String(10), nullable=False)  # G, PG, M, MA15+, R18+
+    runtime = db.Column(db.Integer, nullable=False)  # length in minutes
+    screening_format = db.Column(db.String(30))  # e.g. Digital, 35mm
 
     event_date = db.Column(db.Date, nullable=False)
     start_time = db.Column(db.Time, nullable=False)
@@ -30,17 +31,24 @@ class Event(db.Model):
     tickets_available = db.Column(db.Integer, nullable=False)
     tickets_remaining = db.Column(db.Integer, nullable=False)
 
+    # one of: Open, Inactive, Sold Out, Cancelled
+    # only the application changes this, never the user directly
     status = db.Column(db.String(20), nullable=False, default='Open')
 
+    # acknowledgement of country: none, generic or enhanced
+    # text is only stored when the enhanced option is selected
     acknowledgement_type = db.Column(db.String(20), nullable=False, default='generic')
     acknowledgement_text = db.Column(db.Text)
 
+    # foreign keys linking each event to its venue, category and organiser
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     organiser_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     created_on = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # relationships let us write event.venue.name instead of doing a manual query
+    # backref also lets us go the other way, e.g. venue.events
     venue = db.relationship('Venue', backref='events')
     category = db.relationship('Category', backref='events')
     organiser = db.relationship('User', backref='events')
@@ -51,10 +59,12 @@ class Comment(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
+# lookup table for the categories shown on the event creation form
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
 
+# venues are their own table so multiple events can share the same venue
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
