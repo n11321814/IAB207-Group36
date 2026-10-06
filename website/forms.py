@@ -106,3 +106,9 @@ class EventForm(FlaskForm):
                 return False
 
         return True
+
+# Form enables users to comment on events
+class CommentForm(FlaskForm):
+    content = TextAreaField('Add a Comment', validators=[InputRequired(), Length(min=5, max=2000)])
+
+    submit = SubmitField('Post Comment')
