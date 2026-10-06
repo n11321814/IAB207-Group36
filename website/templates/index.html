@@ -13,16 +13,30 @@
 <header>
   <nav class="navbar navbar-expand-lg qs-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Quirky Screenings</a>
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">Quirky Screenings</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="create-event.html">Create an Event</a></li>
-          <li class="nav-item"><a class="nav-link" href="bookings.html">My Bookings</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+          <!-- Updated navigation to use the routes defined in views.py with the exception of bookings -->
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.create_event') }}">Create an Event</a>
+          </li>
+
+          <!-- We don't have a nav function in views.py for the bookings yet, probs in another branch
+           so I'll just link it to bookings.html for now  -->
+          <li class="nav-item"> 
+              <a class="nav-link" href="bookings.html">My Bookings</a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -77,95 +91,47 @@
     <h2 class="qs-section-title qs-heading">All Screenings</h2>
     <div class="row g-4 align-items-center">
 
+      {% for event in events %}
+
       <div class="col-md-6 col-lg-4">
         <div class="qs-card">
-          <img src="static/img/pulp-fiction.jpg" class="qs-card-img" alt="Pulp Fiction poster still">
+
+          <img src="{{ event.poster_image }}"
+              class="qs-card-img"
+              alt="{{ event.title }} poster">
+
           <div class="qs-card-body p-3">
+
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Pulp Fiction</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
+              <h5 class="mb-0">{{ event.title }}</h5>
+
+              <span class="qs-badge qs-badge-{{ event.status|lower }}">
+                {{ event.status }}
+              </span>
             </div>
-            <p class="qs-card-meta mb-1">Cult Classic - Rated MA15+ - 154 min</p>
-            <p class="qs-card-meta mb-3">Sat 15 Aug, 7:30pm - Bayside Cinemas Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
+
+            <p class="qs-card-meta mb-1">
+              {{ event.category.name }}
+              - Rated {{ event.classification }}
+              - {{ event.runtime }} min
+            </p>
+
+            <p class="qs-card-meta mb-3">
+              {{ event.event_date }}
+              - {{ event.start_time }}
+              - {{ event.venue.name }}
+            </p>
+
+            <a href="{{ url_for('main.event_details', event_id=event.id) }}"
+              class="btn qs-btn-gold btn-sm w-100">
+              View Details
+            </a>
+
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/spirited-away.jpg" class="qs-card-img" alt="Spirited Away poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Spirited Away</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
-            </div>
-            <p class="qs-card-meta mb-1">Foreign Language - Rated PG - 125 min</p>
-            <p class="qs-card-meta mb-3">Sun 23 Aug, 2:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/free-solo.jpg" class="qs-card-img" alt="Free Solo poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Free Solo</h5>
-              <span class="qs-badge qs-badge-soldout">Sold Out</span>
-            </div>
-            <p class="qs-card-meta mb-1">Documentary - Rated M - 100 min</p>
-            <p class="qs-card-meta mb-3">Fri 29 Aug, 8:00pm - Bayside Cinemas, Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/singin-in-the-rain.jpg" class="qs-card-img" alt="Singin' in the Rain poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Singin' in the Rain</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
-            </div>
-            <p class="qs-card-meta mb-1">Musicals - Rated G - 103 min</p>
-            <p class="qs-card-meta mb-3">Sat 5 Sep, 6:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/grand-budapest.jpg" class="qs-card-img" alt="The Grand Budapest Hotel poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">The Grand Budapest Hotel</h5>
-              <span class="qs-badge qs-badge-inactive">Inactive</span>
-            </div>
-            <p class="qs-card-meta mb-1">Arthouse & Independent - Rated M - 99 min</p>
-            <p class="qs-card-meta mb-3">Thu 3 Jul, 9:00pm - Bayside Cinemas Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/jurassic-park.jpg" class="qs-card-img" alt="Jurassic Park (35mm) poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Jurassic Park (35mm)</h5>
-              <span class="qs-badge qs-badge-cancelled">Cancelled</span>
-            </div>
-            <p class="qs-card-meta mb-1">Blockbuster - Rated PG - 127 min</p>
-            <p class="qs-card-meta mb-3">Fri 12 Sep, 7:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
 
     </div>
   </section>

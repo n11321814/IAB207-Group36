@@ -11,6 +11,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     events = Event.query.order_by(Event.event_date).all()
+    print(events)
     return render_template('index.html', events=events)
 
 
@@ -52,9 +53,15 @@ def create_event():
         db.session.add(new_event)
         db.session.commit()
 
+        print("EVENT CREATED")
+        print("ID:", new_event.id)
+        print("TITLE:", new_event.title)
+        print("ORGANISER:", new_event.organiser_id)
+
         flash('Event published successfully.', 'success')
         return redirect(url_for('main.index'))
-
+    print("FORM VALID:", form.validate())
+    print("FORM ERRORS:", form.errors)
     return render_template('create_event.html', form=form)
 
 
@@ -116,3 +123,9 @@ def cancel_event(event_id):
 
     flash('Event has been cancelled.', 'info')
     return redirect(url_for('main.index'))
+
+
+@main_bp.route('/event/<int:event_id>')
+def event_details(event_id):
+    event = Event.query.get_or_404(event_id)
+    return render_template('event_details.html', event=event)

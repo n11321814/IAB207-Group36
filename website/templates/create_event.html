@@ -99,23 +99,38 @@
 
       <div class="mb-4">
         {{ form.acknowledgement_text.label(class="form-label") }}
-        {{ form.acknowledgement_text(class="form-control", rows=4, placeholder="e.g. Name the specific Traditional Owner group for your venue's location, and connect this screening to something concrete — a local Indigenous filmmaker, story, or cause — rather than a generic statement.") }}
-        {% for error in form.acknowledgement_text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-        <div class="form-text">Only stored if "Enhanced Acknowledgement" is selected above. Aim for at least 40 words informed by real research into your venue's location.</div>
+        {{ form.acknowledgement_text(
+            class="form-control",
+            rows=4,
+            placeholder="e.g. Name the specific Traditional Owner group for your venue's location, and connect this screening to something concrete — a local Indigenous filmmaker, story, or cause — rather than a generic statement."
+        ) }}
+
+        {% for error in form.acknowledgement_text.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+
+        <div class="form-text">
+          Only stored if "Enhanced Acknowledgement" is selected above.
+          Aim for at least 40 words informed by real research into your venue's location.
+        </div>
       </div>
 
-      {{ form.submit(class="btn qs-btn-gold px-4") }}
-    </form>
-  </div>
-</main>
+      <div class="d-flex gap-2">
+        {{ form.submit(
+            class="btn qs-btn-gold px-4",
+            value=('Update Event' if editing else 'Publish Event')
+        ) }}
 
-      {{ form.submit(class="btn qs-btn-gold px-4", value=('Update Event' if editing else 'Publish Event')) }}
+        {% if editing %}
+        <button type="button"
+                class="btn btn-outline-danger px-4"
+                data-bs-toggle="modal"
+                data-bs-target="#cancelEventModal">
+          Cancel Event
+        </button>
+        {% endif %}
+      </div>
 
-      {% if editing %}
-      <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal" data-bs-target="#cancelEventModal">
-        Cancel Event
-      </button>
-      {% endif %}
     </form>
   </div>
 </main>
@@ -124,18 +139,37 @@
 <div class="modal fade" id="cancelEventModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content qs-form-panel">
+
       <div class="modal-header border-0">
-        <h2 class="modal-title qs-heading h5">Cancel this screening?</h2>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h2 class="modal-title qs-heading h5">
+          Cancel this screening?
+        </h2>
+
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close">
+        </button>
       </div>
+
       <div class="modal-body">
-        <p>This will mark the event as Cancelled and disable new bookings.</p>
-        <form method="POST" action="{{ url_for('main.cancel_event', event_id=event.id) }}">
-          <button type="submit" class="btn btn-danger w-100">Confirm Cancellation</button>
+        <p>
+          This will mark the event as Cancelled and disable new bookings.
+        </p>
+
+        <form method="POST"
+              action="{{ url_for('main.cancel_event', event_id=event.id) }}">
+
+          <button type="submit" class="btn btn-danger w-100">
+            Confirm Cancellation
+          </button>
+
         </form>
       </div>
+
     </div>
   </div>
 </div>
 {% endif %}
+
 {% endblock %}
