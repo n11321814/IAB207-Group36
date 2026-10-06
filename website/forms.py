@@ -1,29 +1,37 @@
+from datetime import date
+
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
-from wtforms.validators import InputRequired, Length, Email, EqualTo
 from wtforms.fields import (
+    SubmitField, StringField, PasswordField, TextAreaField,
     SelectField, IntegerField, FloatField, DateField, TimeField, RadioField
 )
-from wtforms.validators import NumberRange, Optional
+from wtforms.validators import (
+    InputRequired, Length, Email, EqualTo, NumberRange, Optional
+)
 
 # creates the login information
 class LoginForm(FlaskForm):
-    user_name=StringField("User Name", validators=[InputRequired('Enter user name')])
-    password=PasswordField("Password", validators=[InputRequired('Enter user password')])
+    email = StringField("Email", validators=[InputRequired('Enter email address')])
+    password = PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
  # this is the registration form
 class RegisterForm(FlaskForm):
-    user_name=StringField("User Name", validators=[InputRequired()])
-    email = StringField("Email Address", validators=[Email("Please enter a valid email")])
+    firstname = StringField("First Name", validators=[InputRequired()])
+    surname = StringField("Surname", validators=[InputRequired()])
+    email = StringField("Email Address", validators=[InputRequired(), Email("Please enter a valid email")])
+    contact_number = StringField("Contact Number", validators=[InputRequired()])
+    street_address = StringField("Street Address", validators=[InputRequired()])
+
     # linking two fields - password should be equal to data entered in confirm
-    password=PasswordField("Password", validators=[InputRequired(),
+    password = PasswordField("Password", validators=[InputRequired(),
                   EqualTo('confirm', message="Passwords should match")])
-    confirm = PasswordField("Confirm Password")
+    confirm = PasswordField("Confirm Password", validators=[InputRequired()])
 
     # submit button
     submit = SubmitField("Register")
 
+# form for creating and updating an event, with server-side validation
 class EventForm(FlaskForm):
     title = StringField('Film title', validators=[InputRequired(), Length(max=150)])
     classification = SelectField(
@@ -71,13 +79,21 @@ class EventForm(FlaskForm):
 
     submit = SubmitField('Publish Event')
 
+    # category choices come from the database, so they are loaded when
+    # the form is created rather than when the file is imported
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         from .models import Category
         self.category.choices = [(c.id, c.name) for c in Category.query.order_by('name')]
 
+    # extra checks that the built-in validators can't do for us
     def validate(self, extra_validators=None):
         if not super().validate(extra_validators=extra_validators):
+            return False
+
+        # event date must be in the future (per brief FAQ)
+        if self.event_date.data and self.event_date.data < date.today():
+            self.event_date.errors.append('Event date must be in the future.')
             return False
 
         if self.acknowledgement_type.data == 'enhanced':
