@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from . import db
-from .models import Event, Venue, Category
+from .models import Event, Venue, Category, Order
 from .forms import EventForm
 
 
@@ -12,7 +12,6 @@ main_bp = Blueprint('main', __name__)
 def index():
     events = Event.query.order_by(Event.event_date).all()
     return render_template('index.html', events=events)
-
 
 @main_bp.route('/event/create', methods=['GET', 'POST'])
 @login_required  # only logged-in users can create events
@@ -116,3 +115,9 @@ def cancel_event(event_id):
 
     flash('Event has been cancelled.', 'info')
     return redirect(url_for('main.index'))
+
+@main_bp.route('/account/bookings')
+@login_required
+def my_bookings():
+    orders = Order.query.filter_by(user_id=current_user.id).all()
+    return render_template('bookings.html', orders=orders)
