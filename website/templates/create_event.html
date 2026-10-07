@@ -56,6 +56,7 @@
         <div class="col-md-4">
           {{ form.event_date.label(class="form-label") }}
           {{ form.event_date(class="form-control") }}
+          {% for error in form.event_date.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.start_time.label(class="form-label") }}
