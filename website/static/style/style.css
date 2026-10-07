@@ -84,11 +84,13 @@ body.qs-body{
   padding: 0.35rem 1rem;
   font-size: 0.9rem;
   margin: 0.25rem;
+  text-decoration: none;
 }
 .qs-category-btn:hover,
 .qs-category-btn.active{
   background-color: #cca116;
   color: #1B1A1F;
+  text-decoration: none;
 }
 
 /* Event card */

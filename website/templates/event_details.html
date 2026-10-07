@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}[Name] - Quirky Screenings{% endblock %}
+{% block title %}{{ event.title }} - Quirky Screenings{% endblock %}
 
 {% block content %}
 <main class="container py-5">
@@ -14,28 +14,32 @@
   <div class="row g-5">
 
     <div class="col-lg-7">
-      <img src="static/img/pulp-fiction.jpg" class="img-fluid rounded mb-4" alt="Pulp Fiction screening poster">
-
+      <img
+        src="{{ event.poster_image }}"
+        class="img-fluid rounded mb-4"
+        alt="{{ event.title }} screening poster"
+      >
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="qs-heading mb-0">Pulp Fiction</h1>
-        <span class="qs-badge qs-badge-open">Open</span>
+        <h1 class="qs-heading mb-0">{{ event.title }}</h1>
+        <span class="qs-badge qs-badge-open">{{ event.status }}</span>
       </div>
-      <p class="qs-card-meta mb-4">Cult Classic - Rated MA15+ - 154 min - 35mm Print</p>
+      <p class="qs-card-meta mb-4">{{ event.category.name }} - {{ event.classification }} - {{ event.runtime }} min {% if event.screening_format %} - {{ event.screening_format }} {% endif %}</p>
 
       <h2 class="qs-section-title qs-heading h5">Synopsis</h2>
-      <p>A twisting, non-linear crime story following two hitmen, a boxer, and a gangster's wife across a handful of interlocking tales in Los Angeles. A defining film of 1990s cinema, presented here on a rare 35mm print for this one-off screening.</p>
+      <p>{{ event.synopsis }}</p>
 
       <h2 class="qs-section-title qs-heading h5 mt-4">Details</h2>
       <ul class="list-unstyled">
-        <li class="mb-2"><strong class="text-warning">Venue:</strong> Bayside Cinemas, 82 Berrima St, Wynnum QLD</li>
-        <li class="mb-2"><strong class="text-warning">Date & Time:</strong> Saturday 15 August 2026, 7:30pm – 9:15pm</li>
-        <li class="mb-2"><strong class="text-warning">Ticket Price:</strong> $18.00</li>
-        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> Enhanced - read in full before the screening</li>
-        <li class="mb-2"><strong class="text-warning">Organised by:</strong> nic_q</li>
+        <li class="mb-2"><strong class="text-warning">Venue:</strong> {{ event.venue.name }}, {{ event.venue.address }}</li>
+        <li class="mb-2"><strong class="text-warning">Date & Time:</strong> {{ event.event_date }}, {{ event.start_time }} – {{ event.end_time }}</li>
+        <li class="mb-2"><strong class="text-warning">Ticket Price:</strong> ${{ "%.2f"|format(event.ticket_price) }}</li>
+        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> {{ event.acknowledgement_text }}</li>
+        <!-- TODO: Replace organiser_id with user's username -->
+        <li class="mb-2"><strong class="text-warning">Organised by:</strong> {{ event.organiser_id }}</li>
       </ul>
 
       <div class="ratio ratio-16x9 mb-4">
-        <iframe src="https://www.google.com/maps?q=Bayside+Cinemas,+82+Berrima+St,+Wynnum+QLD&output=embed" style="border:0;" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps?q={{ event.venue.address|urlencode }}&output=embed" style="border:0;" allowfullscreen loading="lazy"></iframe>
       </div>
 
       <h2 class="qs-section-title qs-heading h5 mt-4">Comments</h2>
@@ -64,10 +68,18 @@
     <div class="col-lg-5">
       <div class="qs-form-panel text-center">
         <h2 class="qs-heading h4 mb-3">Book Tickets</h2>
-        <p class="qs-card-meta mb-4">14 of 60 tickets remaining</p>
+        <p class="qs-card-meta mb-4">{{ event.tickets_remaining }} of {{ event.tickets_available }} tickets remaining</p>
+        {% if event.status == "Open" and event.tickets_available > 0 %}
         <button type="button" class="btn qs-btn-gold w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
           Book Now
         </button>
+        {% else %}
+        <button type="button" disabled class="btn qs-btn-gold w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
+          Booking Unavailable
+        </button>
+        {% endif %}
+
+
       </div>
 
       <p class="qs-card-meta mt-4 mb-2 qs-text-xs qs-text-muted-warm"><em>This panel changes depending on the event's status. For example:</em></p>

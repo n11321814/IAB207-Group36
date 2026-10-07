@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
+from flask import request
 from . import db
 from .models import Event, Venue, Category, Order, Comment
 from .forms import EventForm, CommentForm
@@ -10,7 +11,36 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    events = Event.query.order_by(Event.event_date).all()
+    title = request.args.get('title', '').strip()
+    category = request.args.get('category', '').strip()
+    sort = request.args.get('sort', 'newest')
+
+    events = Event.query
+
+    if title:
+        events = events.filter(
+            Event.title.ilike(f'%{title}%')
+        )
+
+    if category:
+        events = events.join(Event.category).filter(
+            Category.name == category
+        )
+
+    if sort == 'price_asc':
+        events = events.order_by(Event.ticket_price.asc())
+
+    elif sort == 'price_desc':
+        events = events.order_by(Event.ticket_price.desc())
+
+    elif sort == 'title_asc':
+        events = events.order_by(Event.title.asc())
+
+    else:
+        events = events.order_by(Event.event_date.desc())
+
+    events = events.all()
+
     return render_template('index.html', events=events)
 
 @main_bp.route('/event/create', methods=['GET', 'POST'])

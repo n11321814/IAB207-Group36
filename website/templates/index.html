@@ -13,16 +13,30 @@
 <header>
   <nav class="navbar navbar-expand-lg qs-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Quirky Screenings</a>
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">Quirky Screenings</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="create-event.html">Create an Event</a></li>
-          <li class="nav-item"><a class="nav-link" href="bookings.html">My Bookings</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+          <!-- Updated navigation to use the routes defined in views.py with the exception of bookings -->
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.create_event') }}">Create an Event</a>
+          </li>
+
+          <!-- We don't have a nav function in views.py for the bookings yet, probs in another branch
+           so I'll just link it to bookings.html for now  -->
+          <li class="nav-item"> 
+              <a class="nav-link" href="bookings.html">My Bookings</a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -41,23 +55,60 @@
   <section class="container py-5">
     <div class="row g-3 align-items-center mb-4">
       <div class="col-md-7">
-        <div class="input-group">
-          <span class="input-group-text bg-transparent border-secondary-subtle">
-            <i class="bi bi-search qs-search-icon"></i>
-          </span>
-          <input type="text" class="form-control qs-search-input" placeholder="Search screenings by film title..." aria-label="Search screenings">
-        </div>
+        <form method="GET" action="{{ url_for('main.index') }}">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-secondary-subtle">
+                    <i class="bi bi-search qs-search-icon"></i>
+                </span>
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ request.args.get('title', '') }}"
+                    class="form-control qs-search-input"
+                    placeholder="Search screenings by film title..."
+                    aria-label="Search screenings">
+
+                <button type="submit" class="btn qs-btn-gold">
+                    Search
+                </button>
+            </div>
+        </form>
       </div>
       <div class="col-md-5 text-md-end">
         <div class="dropdown">
           <button class="btn qs-btn-outline-gold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Sort: Newest
+            {% if request.args.get('sort') == 'price_asc' %}
+              Sort: Price Low to High
+            {% elif request.args.get('sort') == 'price_desc' %}
+              Sort: Price High to Low
+            {% elif request.args.get('sort') == 'title_asc' %}
+              Sort: Name A-Z
+            {% else %}
+              Sort: Newest
+            {% endif %}
+
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Newest</a></li>
-            <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-            <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-            <li><a class="dropdown-item" href="#">Name: A-Z</a></li>
+            <li><a class="dropdown-item " href="{{ url_for('main.index',
+              title=request.args.get('title', ''),
+              category=request.args.get('category', ''),
+              sort='newest'
+              ) }}">Newest</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='price_asc'
+              ) }}">Price: Low to High</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='price_desc'
+              ) }}">Price: High to Low</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='title_asc'
+              ) }}">Name: A-Z</a></li>
           </ul>
         </div>
       </div>
@@ -65,108 +116,90 @@
 
     <h2 class="qs-section-title qs-heading">Browse by Category</h2>
     <div class="mb-4">
-      <button class="qs-category-btn active">All</button>
-      <button class="qs-category-btn">Cult Classic</button>
-      <button class="qs-category-btn">Foreign Language</button>
-      <button class="qs-category-btn">Documentary</button>
-      <button class="qs-category-btn">Arthouse & Independent</button>
-      <button class="qs-category-btn">Musicals</button>
-      <button class="qs-category-btn">Blockbuster</button>
+      <a class="qs-category-btn {% if not request.args.get('category') %}active{% endif %}" href="{{ url_for('main.index',
+        category='',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">All</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Cult Classic' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Cult Classic',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Cult Classic</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Foreign Language' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Foreign Language',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Foreign Language</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Documentary' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Documentary',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Documentary</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Arthouse & Independent' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Arthouse & Independent',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Arthouse & Independent</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Musicals' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Musicals',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Musicals</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Blockbuster' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Blockbuster',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Blockbuster</a>
     </div>
 
     <h2 class="qs-section-title qs-heading">All Screenings</h2>
     <div class="row g-4 align-items-center">
 
+      {% for event in events %}
+
       <div class="col-md-6 col-lg-4">
         <div class="qs-card">
-          <img src="static/img/pulp-fiction.jpg" class="qs-card-img" alt="Pulp Fiction poster still">
+
+          <img src="{{ event.poster_image }}"
+              class="qs-card-img"
+              alt="{{ event.title }} poster">
+
           <div class="qs-card-body p-3">
+
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Pulp Fiction</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
+              <h5 class="mb-0">{{ event.title }}</h5>
+
+              <span class="qs-badge qs-badge-{{ event.status|lower }}">
+                {{ event.status }}
+              </span>
             </div>
-            <p class="qs-card-meta mb-1">Cult Classic - Rated MA15+ - 154 min</p>
-            <p class="qs-card-meta mb-3">Sat 15 Aug, 7:30pm - Bayside Cinemas Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
+
+            <p class="qs-card-meta mb-1">
+              {{ event.category.name }}
+              - Rated {{ event.classification }}
+              - {{ event.runtime }} min
+            </p>
+
+            <p class="qs-card-meta mb-3">
+              {{ event.event_date }}
+              - {{ event.start_time }}
+              - {{ event.venue.name }}
+            </p>
+
+            <a href="{{ url_for('main.event_details', event_id=event.id) }}"
+              class="btn qs-btn-gold btn-sm w-100">
+              View Details
+            </a>
+
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/spirited-away.jpg" class="qs-card-img" alt="Spirited Away poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Spirited Away</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
-            </div>
-            <p class="qs-card-meta mb-1">Foreign Language - Rated PG - 125 min</p>
-            <p class="qs-card-meta mb-3">Sun 23 Aug, 2:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/free-solo.jpg" class="qs-card-img" alt="Free Solo poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Free Solo</h5>
-              <span class="qs-badge qs-badge-soldout">Sold Out</span>
-            </div>
-            <p class="qs-card-meta mb-1">Documentary - Rated M - 100 min</p>
-            <p class="qs-card-meta mb-3">Fri 29 Aug, 8:00pm - Bayside Cinemas, Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/singin-in-the-rain.jpg" class="qs-card-img" alt="Singin' in the Rain poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Singin' in the Rain</h5>
-              <span class="qs-badge qs-badge-open">Open</span>
-            </div>
-            <p class="qs-card-meta mb-1">Musicals - Rated G - 103 min</p>
-            <p class="qs-card-meta mb-3">Sat 5 Sep, 6:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/grand-budapest.jpg" class="qs-card-img" alt="The Grand Budapest Hotel poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">The Grand Budapest Hotel</h5>
-              <span class="qs-badge qs-badge-inactive">Inactive</span>
-            </div>
-            <p class="qs-card-meta mb-1">Arthouse & Independent - Rated M - 99 min</p>
-            <p class="qs-card-meta mb-3">Thu 3 Jul, 9:00pm - Bayside Cinemas Brisbane</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="qs-card">
-          <img src="static/img/jurassic-park.jpg" class="qs-card-img" alt="Jurassic Park (35mm) poster still">
-          <div class="qs-card-body p-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="mb-0">Jurassic Park (35mm)</h5>
-              <span class="qs-badge qs-badge-cancelled">Cancelled</span>
-            </div>
-            <p class="qs-card-meta mb-1">Blockbuster - Rated PG - 127 min</p>
-            <p class="qs-card-meta mb-3">Fri 12 Sep, 7:00pm - Bayside Cinemas</p>
-            <a href="event-details.html" class="btn qs-btn-outline-gold btn-sm w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-
+      {% endfor %}
+      {% if events == [] %}
+      <p>No events to show, please use different search terms and try again.</p>
+      {% endif %}
     </div>
   </section>
 </main>
