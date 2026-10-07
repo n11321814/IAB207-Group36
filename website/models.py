@@ -57,6 +57,17 @@ class Event(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
+    content = db.Column(db.Text, nullable=False)
+    posted_on = db.Column(db.Date, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")).date())
+    
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
+
+    event = db.relationship('Event', backref='comments')
+    user = db.relationship('User', backref='comments')
+
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
