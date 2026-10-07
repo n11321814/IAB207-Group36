@@ -2,8 +2,8 @@ from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from flask import request
 from . import db
-from .models import Event, Venue, Category
-from .forms import EventForm
+from .models import Event, Venue, Category, Order, Comment
+from .forms import EventForm, CommentForm
 
 
 main_bp = Blueprint('main', __name__)
@@ -42,7 +42,6 @@ def index():
     events = events.all()
 
     return render_template('index.html', events=events)
-
 
 @main_bp.route('/event/create', methods=['GET', 'POST'])
 @login_required  # only logged-in users can create events
@@ -87,6 +86,14 @@ def create_event():
 
     return render_template('create_event.html', form=form)
 
+
+@main_bp.route('/event/<int:event_id>')
+def event_details(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    comment_form = CommentForm() if current_user.is_authenticated else None
+
+    return render_template('event_details.html', event=event, comment_form=comment_form)
 
 @main_bp.route('/event/<int:event_id>/update', methods=['GET', 'POST'])
 @login_required
@@ -147,12 +154,31 @@ def cancel_event(event_id):
     flash('Event has been cancelled.', 'info')
     return redirect(url_for('main.index'))
 
-
-@main_bp.route('/event/<int:event_id>')
-def event_details(event_id):
+@main_bp.route('/event/<int:event_id>/comment', methods=['POST'])
+@login_required
+def comment_event(event_id):
     event = Event.query.get_or_404(event_id)
 
-    return render_template(
-        'event_details.html',
-        event=event
-    )
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        new_comment = Comment(
+            content=form.content.data,
+            event_id=event_id,
+            user_id=current_user.id,
+        )
+
+        db.session.add(new_comment)
+        db.session.commit()
+        flash('Comment Posted Successfully!', 'success')
+
+    
+    return redirect(url_for('main.event_details', event_id=event.id))
+
+
+
+@main_bp.route('/account/bookings')
+@login_required
+def my_bookings():
+    orders = Order.query.filter_by(user_id=current_user.id).all()
+    return render_template('bookings.html', orders=orders)
