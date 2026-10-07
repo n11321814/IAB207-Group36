@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
+from flask import request
 from . import db
 from .models import Event, Venue, Category
 from .forms import EventForm
@@ -10,8 +11,36 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    events = Event.query.order_by(Event.event_date).all()
-    print(events)
+    title = request.args.get('title', '').strip()
+    category = request.args.get('category', '').strip()
+    sort = request.args.get('sort', 'newest')
+
+    events = Event.query
+
+    if title:
+        events = events.filter(
+            Event.title.ilike(f'%{title}%')
+        )
+
+    if category:
+        events = events.join(Event.category).filter(
+            Category.name == category
+        )
+
+    if sort == 'price_asc':
+        events = events.order_by(Event.ticket_price.asc())
+
+    elif sort == 'price_desc':
+        events = events.order_by(Event.ticket_price.desc())
+
+    elif sort == 'title_asc':
+        events = events.order_by(Event.title.asc())
+
+    else:
+        events = events.order_by(Event.event_date.desc())
+
+    events = events.all()
+
     return render_template('index.html', events=events)
 
 
@@ -53,15 +82,9 @@ def create_event():
         db.session.add(new_event)
         db.session.commit()
 
-        print("EVENT CREATED")
-        print("ID:", new_event.id)
-        print("TITLE:", new_event.title)
-        print("ORGANISER:", new_event.organiser_id)
-
         flash('Event published successfully.', 'success')
         return redirect(url_for('main.index'))
-    print("FORM VALID:", form.validate())
-    print("FORM ERRORS:", form.errors)
+
     return render_template('create_event.html', form=form)
 
 
@@ -128,4 +151,8 @@ def cancel_event(event_id):
 @main_bp.route('/event/<int:event_id>')
 def event_details(event_id):
     event = Event.query.get_or_404(event_id)
-    return render_template('event_details.html', event=event)
+
+    return render_template(
+        'event_details.html',
+        event=event
+    )

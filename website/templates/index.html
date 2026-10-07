@@ -55,23 +55,60 @@
   <section class="container py-5">
     <div class="row g-3 align-items-center mb-4">
       <div class="col-md-7">
-        <div class="input-group">
-          <span class="input-group-text bg-transparent border-secondary-subtle">
-            <i class="bi bi-search qs-search-icon"></i>
-          </span>
-          <input type="text" class="form-control qs-search-input" placeholder="Search screenings by film title..." aria-label="Search screenings">
-        </div>
+        <form method="GET" action="{{ url_for('main.index') }}">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-secondary-subtle">
+                    <i class="bi bi-search qs-search-icon"></i>
+                </span>
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ request.args.get('title', '') }}"
+                    class="form-control qs-search-input"
+                    placeholder="Search screenings by film title..."
+                    aria-label="Search screenings">
+
+                <button type="submit" class="btn qs-btn-gold">
+                    Search
+                </button>
+            </div>
+        </form>
       </div>
       <div class="col-md-5 text-md-end">
         <div class="dropdown">
           <button class="btn qs-btn-outline-gold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Sort: Newest
+            {% if request.args.get('sort') == 'price_asc' %}
+              Sort: Price Low to High
+            {% elif request.args.get('sort') == 'price_desc' %}
+              Sort: Price High to Low
+            {% elif request.args.get('sort') == 'title_asc' %}
+              Sort: Name A-Z
+            {% else %}
+              Sort: Newest
+            {% endif %}
+
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Newest</a></li>
-            <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-            <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-            <li><a class="dropdown-item" href="#">Name: A-Z</a></li>
+            <li><a class="dropdown-item " href="{{ url_for('main.index',
+              title=request.args.get('title', ''),
+              category=request.args.get('category', ''),
+              sort='newest'
+              ) }}">Newest</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='price_asc'
+              ) }}">Price: Low to High</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='price_desc'
+              ) }}">Price: High to Low</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.index',
+                  title=request.args.get('title', ''),
+                  category=request.args.get('category', ''),
+                  sort='title_asc'
+              ) }}">Name: A-Z</a></li>
           </ul>
         </div>
       </div>
@@ -79,13 +116,41 @@
 
     <h2 class="qs-section-title qs-heading">Browse by Category</h2>
     <div class="mb-4">
-      <button class="qs-category-btn active">All</button>
-      <button class="qs-category-btn">Cult Classic</button>
-      <button class="qs-category-btn">Foreign Language</button>
-      <button class="qs-category-btn">Documentary</button>
-      <button class="qs-category-btn">Arthouse & Independent</button>
-      <button class="qs-category-btn">Musicals</button>
-      <button class="qs-category-btn">Blockbuster</button>
+      <a class="qs-category-btn {% if not request.args.get('category') %}active{% endif %}" href="{{ url_for('main.index',
+        category='',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">All</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Cult Classic' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Cult Classic',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Cult Classic</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Foreign Language' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Foreign Language',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Foreign Language</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Documentary' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Documentary',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Documentary</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Arthouse & Independent' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Arthouse & Independent',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Arthouse & Independent</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Musicals' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Musicals',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Musicals</a>
+      <a class="qs-category-btn {% if request.args.get('category') == 'Blockbuster' %}active{% endif %}" href="{{ url_for('main.index',
+        category='Blockbuster',
+        title=request.args.get('title', ''),
+        sort=request.args.get('sort', 'newest')
+        ) }}">Blockbuster</a>
     </div>
 
     <h2 class="qs-section-title qs-heading">All Screenings</h2>
@@ -132,7 +197,9 @@
       </div>
 
       {% endfor %}
-
+      {% if events == [] %}
+      <p>No events to show, please use different search terms and try again.</p>
+      {% endif %}
     </div>
   </section>
 </main>
