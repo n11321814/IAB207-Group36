@@ -21,7 +21,7 @@
       >
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h1 class="qs-heading mb-0">{{ event.title }}</h1>
-        <span class="qs-badge qs-badge-open">{{ event.status }}</span>
+        <span class="qs-badge qs-badge-{{ event.status|lower|replace(' ', '') }}">{{ event.status }}</span>
       </div>
       <p class="qs-card-meta mb-4">{{ event.category.name }} - {{ event.classification }} - {{ event.runtime }} min {% if event.screening_format %} - {{ event.screening_format }} {% endif %}</p>
 
@@ -33,9 +33,8 @@
         <li class="mb-2"><strong class="text-warning">Venue:</strong> {{ event.venue.name }}, {{ event.venue.address }}</li>
         <li class="mb-2"><strong class="text-warning">Date & Time:</strong> {{ event.event_date }}, {{ event.start_time }} – {{ event.end_time }}</li>
         <li class="mb-2"><strong class="text-warning">Ticket Price:</strong> ${{ "%.2f"|format(event.ticket_price) }}</li>
-        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> {{ event.acknowledgement_text }}</li>
-        <!-- TODO: Replace organiser_id with user's username -->
-        <li class="mb-2"><strong class="text-warning">Organised by:</strong> {{ event.organiser_id }}</li>
+        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> {% if event.acknowledgement_text %}{{ event.acknowledgement_text }}{% else %}None specified{% endif %}</li>
+        <li class="mb-2"><strong class="text-warning">Organised by:</strong> {{ event.organiser.firstname }} {{ event.organiser.surname }}</li>
       </ul>
 
       <div class="ratio ratio-16x9 mb-4">
@@ -114,11 +113,12 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content qs-form-panel">
       <div class="modal-header border-0">
-        <h2 class="modal-title qs-heading h4" id="bookingModalLabel">Book Tickets - Pulp Fiction</h2>
+        <h2 class="modal-title qs-heading h4" id="bookingModalLabel">Book Tickets - {{ event.title }}</h2>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
+        {# TODO (Booking role): placeholder alerts from the A1 prototype - remove when the booking flow is wired up
         <div class="alert alert-success d-flex align-items-start gap-2 mb-3" role="alert">
           <i class="bi bi-check-circle-fill mt-1"></i>
           <div>
@@ -133,6 +133,7 @@
           </div>
         </div>
         <p class="qs-card-meta mb-3 qs-text-xs"><em>Example states shown above - a real booking would display only the relevant message.</em></p>
+        #}
 
         <form>
           <div class="mb-3">
