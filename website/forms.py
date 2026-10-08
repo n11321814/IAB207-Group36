@@ -112,3 +112,7 @@ class CommentForm(FlaskForm):
     content = TextAreaField('Add a Comment', validators=[InputRequired(), Length(min=5, max=2000)])
 
     submit = SubmitField('Post Comment')
+
+class OrderForm(FlaskForm):
+    quantity = IntegerField('Number of tickets', validators=[InputRequired(), NumberRange(min=1)])
+    submit = SubmitField('Confirm Booking')
