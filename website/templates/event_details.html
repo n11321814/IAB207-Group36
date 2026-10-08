@@ -45,7 +45,7 @@
       
       {% for comment in event.comments %}
         <div class="qs-comment">
-          <strong>{{ comment.user.firstname }} {{ comment.user.surname }}</strong> <span class="qs-comment-date">- {{ comment.posted_on.strftime('%d %b %Y') }}</span>
+          <strong>{{ comment.user.firstname }} {{ comment.user.surname }}</strong> <span class="qs-comment-date">- {{ comment.posted_on.strftime('%d %b %Y %I:%M %p') }}</span>
           <p class="mb-0 mt-1">{{ comment.content }}</p>
         </div>
       {% endfor %}
