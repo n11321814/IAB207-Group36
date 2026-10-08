@@ -3,7 +3,8 @@ from flask_login import login_required, current_user
 from flask import request
 from . import db
 from .models import Event, Venue, Category, Order, Comment
-from .forms import EventForm, CommentForm
+from .forms import EventForm, CommentForm, OrderForm
+from markupsafe import Markup
 
 
 main_bp = Blueprint('main', __name__)
@@ -92,8 +93,9 @@ def event_details(event_id):
     event = Event.query.get_or_404(event_id)
 
     comment_form = CommentForm() if current_user.is_authenticated else None
+    booking_form = OrderForm() if current_user.is_authenticated else None
 
-    return render_template('event_details.html', event=event, comment_form=comment_form)
+    return render_template('event_details.html', event=event, comment_form=comment_form, booking_form=booking_form)
 
 @main_bp.route('/event/<int:event_id>/update', methods=['GET', 'POST'])
 @login_required
@@ -173,6 +175,38 @@ def comment_event(event_id):
         flash('Comment Posted Successfully!', 'success')
 
     
+    return redirect(url_for('main.event_details', event_id=event.id))
+
+@main_bp.route('/event/<int:event_id>/book', methods=['POST'])
+@login_required
+def book_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    form = OrderForm()
+
+    if form.validate_on_submit():
+        event = Event.query.get_or_404(event_id)
+        remaining_tickets = event.tickets_remaining - form.quantity.data
+        if remaining_tickets < 0:
+            message = Markup("<strong>Order cannot be placed.</strong> You requested more tickets than are available for this session.")
+            flash(message, 'danger')
+        else:
+            event.tickets_remaining = remaining_tickets
+            if remaining_tickets == 0:
+                event.status = 'Sold Out'
+            db.session.flush()
+
+            new_order = Order(
+                quantity=form.quantity.data,
+                event_id=event_id,
+                user_id=current_user.id,
+            )
+            db.session.add(new_order)
+            db.session.commit()
+
+            message = Markup(f"<strong>Booking confirmed!</strong> Order #{new_order.id} - {new_order.quantity} tickets for {event.title}. A confirmation has been sent to your email.")
+            flash(message, 'success')
+
     return redirect(url_for('main.event_details', event_id=event.id))
 
 
