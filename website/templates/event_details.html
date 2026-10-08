@@ -15,7 +15,7 @@
 
     <div class="col-lg-7">
       <img
-        src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}"onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/no-poster.png') }}';"
+        src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/no-poster.png') }}';"
         class="img-fluid rounded mb-4"
         alt="{{ event.title }} screening poster"
       >
@@ -45,7 +45,7 @@
       
       {% for comment in event.comments %}
         <div class="qs-comment">
-          <strong>{{ comment.user.firstname }} {{ comment.user.surname }}</strong> <span class="qs-comment-date">- {{ comment.posted_on.strftime('%-d %b %Y') }}</span>
+          <strong>{{ comment.user.firstname }} {{ comment.user.surname }}</strong> <span class="qs-comment-date">- {{ comment.posted_on.strftime('%d %b %Y') }}</span>
           <p class="mb-0 mt-1">{{ comment.content }}</p>
         </div>
       {% endfor %}
@@ -61,6 +61,11 @@
           
           {{ comment_form.submit(class="btn qs-btn-outline-gold") }}
         </form>
+      {% else %}
+        <p class="mt-4 qs-card-meta">
+          <a href="{{ url_for('auth.login') }}" class="qs-btn-outline-gold" style="text-decoration:underline;">Log in</a>
+          to join the discussion.
+        </p>
       {% endif %}
     </div>
 

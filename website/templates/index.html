@@ -176,16 +176,15 @@
               </span>
             </div>
 
-            <p class="qs-card-meta mb-1">
-              {{ event.category.name }}
-              - Rated {{ event.classification }}
-              - {{ event.runtime }} min
+            <p class="qs-card-meta mb-3">
+              {{ event.event_date.strftime('%d %b %Y') }}
+              - {{ event.start_time.strftime('%I:%M %p') }}
+              - {{ event.venue.name }}
             </p>
 
             <p class="qs-card-meta mb-3">
-              {{ event.event_date }}
-              - {{ event.start_time }}
-              - {{ event.venue.name }}
+              ${{ "%.2f"|format(event.ticket_price) }} per ticket
+              - {{ event.tickets_remaining }} of {{ event.tickets_available }} remaining
             </p>
 
             <a href="{{ url_for('main.event_details', event_id=event.id) }}"
