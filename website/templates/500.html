@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center py-5">
+    <h1 class="display-4">500 Something Went Wrong</h1>
+    <p class="lead">Sorry an unexpected error occurred. Please try again later.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-dark">Back to Home</a>
+</div>
+{% endblock %}

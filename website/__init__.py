@@ -3,6 +3,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask import Flask, render_template
 
 db = SQLAlchemy()
 
@@ -41,5 +42,14 @@ def create_app():
 
     from . import auth
     app.register_blueprint(auth.auth_bp)
-    
+
+    # Error handlers show the error page when a 404 or 500 error occurs
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        return render_template('500.html'), 500
+
     return app
