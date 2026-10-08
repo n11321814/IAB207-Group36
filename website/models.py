@@ -58,7 +58,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     content = db.Column(db.Text, nullable=False)
-    posted_on = db.Column(db.Date, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")).date())
+    posted_on = db.Column(db.DateTime, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")))
     
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
