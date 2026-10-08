@@ -19,22 +19,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto">
-          <!-- Updated navigation to use the routes defined in views.py -->
-          <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
-          </li>
-
-          <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('main.create_event') }}">Create an Event</a>
-          </li>
-
-          <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('main.my_bookings') }}">My Bookings</a>
-          </li>
-
-          <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.create_event') }}">Create an Event</a></li>
+          {% if current_user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.my_bookings') }}">My Bookings</a></li>
+          <li class="nav-item"><span class="nav-link">Welcome, {{ current_user.firstname }}</span></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -43,6 +36,19 @@
 </header>
 
 <main>
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
   <section class="qs-hero">
     <h1 class="qs-heading">Films the Cinemas Won't Show</h1>
     <p>Organise or discover one-off private screenings of cult classics, forgotten gems and films you never thought you'd see on the big screen again.</p>

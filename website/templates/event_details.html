@@ -5,9 +5,9 @@
 <main class="container py-5">
   <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb qs-breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-      <li class="breadcrumb-item"><a href="index.html">Cult Classic</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pulp Fiction</li>
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index', category=event.category.name) }}">{{ event.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ event.title }}</li>
     </ol>
   </nav>
 
@@ -81,6 +81,10 @@
 
       </div>
 
+      {% if current_user.is_authenticated and current_user.id == event.organiser_id %}
+      <a href="{{ url_for('main.update_event', event_id=event.id) }}" class="btn qs-btn-outline-gold w-100 mt-2">Edit Event</a>
+      {% endif %}
+
       <p class="qs-card-meta mt-4 mb-2 qs-text-xs qs-text-muted-warm"><em>This panel changes depending on the event's status. For example:</em></p>
 
       <div class="qs-form-panel mb-3 py-3">
@@ -138,12 +142,12 @@
         <form>
           <div class="mb-3">
             <label for="numTickets" class="form-label">Number of tickets</label>
-            <input type="number" class="form-control" id="numTickets" min="1" max="14" value="1">
-            <div class="form-text">Maximum 14 tickets available for this session.</div>
+            <input type="number" class="form-control" id="numTickets" min="1" max="{{ event.tickets_remaining }}" value="1">
+            <div class="form-text">Maximum {{ event.tickets_remaining }} tickets available for this session.</div>
           </div>
           <div class="mb-3">
-            <label class="form-label">Total</label>
-            <p class="fs-4 mb-0" id="ticketTotal">$18.00</p>
+            <label class="form-label">Price per ticket</label>
+            <p class="fs-4 mb-0" id="ticketTotal">${{ "%.2f"|format(event.ticket_price) }}</p>
           </div>
           <button type="submit" class="btn qs-btn-gold w-100">Confirm Booking</button>
         </form>
