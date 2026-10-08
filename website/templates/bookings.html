@@ -30,7 +30,7 @@
               <td>{{ order.id }}</td>
               <td>{{ order.quantity }}</td>
               <td>{{ order.created_on_local.strftime('%d %b %Y %I:%M %p') }}</td>
-              <td>{{ order.event.event_date.strftime('%-d %b %Y') }}, {{ order.event.start_time.strftime('%-I:%M %p') }}</td>
+              <td>{{ order.event.event_date.strftime('%I:%M %p') }}, {{ order.event.start_time.strftime('%I:%M %p') }}</td>
               <td>
                 <span class="qs-badge qs-badge-{{ order.event.status.replace(' ', '').lower() }}">{{ order.event.status }}</span>
               </td>
