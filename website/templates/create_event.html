@@ -19,26 +19,32 @@
         <div class="col-md-4">
           {{ form.classification.label(class="form-label") }}
           {{ form.classification(class="form-select") }}
+          {% for error in form.classification.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-12">
           {{ form.synopsis.label(class="form-label") }}
           {{ form.synopsis(class="form-control", rows=4) }}
+          {% for error in form.synopsis.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.runtime.label(class="form-label") }}
           {{ form.runtime(class="form-control") }}
+          {% for error in form.runtime.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.screening_format.label(class="form-label") }}
           {{ form.screening_format(class="form-select") }}
+          {% for error in form.screening_format.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.category.label(class="form-label") }}
           {{ form.category(class="form-select") }}
+          {% for error in form.category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-12">
           {{ form.poster_image.label(class="form-label") }}
           {{ form.poster_image(class="form-control") }}
+          {% for error in form.poster_image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
           <div class="form-text">Paste a link to an image of the film poster.</div>
         </div>
       </div>
@@ -48,10 +54,12 @@
         <div class="col-md-6">
           {{ form.venue_name.label(class="form-label") }}
           {{ form.venue_name(class="form-control") }}
+          {% for error in form.venue_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-6">
           {{ form.venue_address.label(class="form-label") }}
           {{ form.venue_address(class="form-control") }}
+          {% for error in form.venue_address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.event_date.label(class="form-label") }}
@@ -61,10 +69,12 @@
         <div class="col-md-4">
           {{ form.start_time.label(class="form-label") }}
           {{ form.start_time(class="form-control") }}
+          {% for error in form.start_time.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
           {{ form.end_time.label(class="form-label") }}
           {{ form.end_time(class="form-control") }}
+          {% for error in form.end_time.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
       </div>
 
@@ -73,10 +83,12 @@
         <div class="col-md-6">
           {{ form.ticket_price.label(class="form-label") }}
           {{ form.ticket_price(class="form-control") }}
+          {% for error in form.ticket_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="col-md-6">
           {{ form.tickets_available.label(class="form-label") }}
           {{ form.tickets_available(class="form-control") }}
+          {% for error in form.tickets_available.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
           <div class="form-text">Set this to match your venue's capacity.</div>
         </div>
       </div>
@@ -103,7 +115,7 @@
         {{ form.acknowledgement_text(
             class="form-control",
             rows=4,
-            placeholder="e.g. Name the specific Traditional Owner group for your venue's location, and connect this screening to something concrete — a local Indigenous filmmaker, story, or cause — rather than a generic statement."
+            placeholder="Consider naming the Traditional Owner group for your venue's area, paying respect to Elders, and connecting your screening to a local story or cause."
         ) }}
 
         {% for error in form.acknowledgement_text.errors %}
@@ -112,7 +124,7 @@
 
         <div class="form-text">
           Only stored if "Enhanced Acknowledgement" is selected above.
-          Aim for at least 40 words informed by real research into your venue's location.
+          Must be at least 40 words, informed by real research into your venue's location.
         </div>
       </div>
 
@@ -166,6 +178,7 @@
           </button>
 
         </form>
+
       </div>
 
     </div>
