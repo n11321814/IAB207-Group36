@@ -1,6 +1,7 @@
 from datetime import date
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import (
     SubmitField, StringField, PasswordField, TextAreaField,
     SelectField, IntegerField, FloatField, DateField, TimeField, RadioField
@@ -48,6 +49,7 @@ class EventForm(FlaskForm):
     )
     category = SelectField('Category', coerce=int, validators=[InputRequired()])
     poster_image = StringField('Poster image URL', validators=[Optional(), Length(max=300)])
+    poster_upload = FileField('Or upload a poster file', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], 'Images only (JPG or PNG)')])
 
     venue_name = StringField('Venue name', validators=[InputRequired(), Length(max=100)])
     venue_address = StringField('Venue address', validators=[InputRequired(), Length(max=200)])

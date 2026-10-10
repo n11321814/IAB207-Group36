@@ -6,7 +6,7 @@
   <h1 class="qs-heading mb-3">{{ 'Update Screening' if editing else 'Create a Screening' }}</h1>
 
   <div class="qs-form-panel">
-    <form method="POST" novalidate>
+    <form method="POST" enctype="multipart/form-data" novalidate>
       {{ form.hidden_tag() }}
 
       <h2 class="qs-heading h5 mb-3">Film Details</h2>
@@ -46,6 +46,12 @@
           {{ form.poster_image(class="form-control") }}
           {% for error in form.poster_image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
           <div class="form-text">Paste a link to an image of the film poster.</div>
+        </div>
+        <div class="col-12">
+          {{ form.poster_upload.label(class="form-label") }}
+          {{ form.poster_upload(class="form-control") }}
+          {% for error in form.poster_upload.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          <div class="form-text">JPG or PNG. An upload is used instead of the link if both are filled in.</div>
         </div>
       </div>
 

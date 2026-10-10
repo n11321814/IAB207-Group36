@@ -1,6 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
+import os
+import uuid
+
+from flask import Blueprint, render_template, redirect, url_for, flash, abort, request, current_app
 from flask_login import login_required, current_user
-from flask import request
+from werkzeug.utils import secure_filename
+
 from . import db
 from .models import Event, Venue, Category, Order, Comment
 from .forms import EventForm, CommentForm, OrderForm
@@ -9,6 +13,13 @@ from markupsafe import Markup, escape
 
 main_bp = Blueprint('main', __name__)
 
+def save_poster_upload(upload):
+    """Save an uploaded poster file and return its URL path."""
+    filename = f"{uuid.uuid4().hex[:8]}_{secure_filename(upload.filename)}"
+    upload_dir = os.path.join(current_app.root_path, 'static', 'img', 'uploads')
+    os.makedirs(upload_dir, exist_ok=True)
+    upload.save(os.path.join(upload_dir, filename))
+    return f"/static/img/uploads/{filename}"
 
 @main_bp.route('/')
 def index():
@@ -57,10 +68,15 @@ def create_event():
             db.session.add(venue)
             db.session.flush()  # assigns venue.id so we can use it below
 
+        # an uploaded file beats a pasted URL if both are given
+        poster = form.poster_image.data
+        if form.poster_upload.data:
+            poster = save_poster_upload(form.poster_upload.data)
+
         new_event = Event(
             title=form.title.data,
             synopsis=form.synopsis.data,
-            poster_image=form.poster_image.data,
+            poster_image=poster,
             classification=form.classification.data,
             runtime=form.runtime.data,
             screening_format=form.screening_format.data,
@@ -118,6 +134,8 @@ def update_event(event_id):
         event.title = form.title.data
         event.synopsis = form.synopsis.data
         event.poster_image = form.poster_image.data
+        if form.poster_upload.data:
+            event.poster_image = save_poster_upload(form.poster_upload.data)
         event.classification = form.classification.data
         event.runtime = form.runtime.data
         event.screening_format = form.screening_format.data
