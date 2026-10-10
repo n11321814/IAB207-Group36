@@ -51,7 +51,7 @@
           {{ form.poster_upload.label(class="form-label") }}
           {{ form.poster_upload(class="form-control") }}
           {% for error in form.poster_upload.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-          <div class="form-text">JPG or PNG. An upload is used instead of the link if both are filled in.</div>
+          <div class="form-text">Images only: PNG or JPG.</div>
         </div>
       </div>
 
@@ -95,7 +95,6 @@
           {{ form.tickets_available.label(class="form-label") }}
           {{ form.tickets_available(class="form-control") }}
           {% for error in form.tickets_available.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-          <div class="form-text">Set this to match your venue's capacity.</div>
         </div>
       </div>
 
@@ -128,10 +127,7 @@
           <div class="text-danger small">{{ error }}</div>
         {% endfor %}
 
-        <div class="form-text">
-          Only stored if "Enhanced Acknowledgement" is selected above.
-          Must be at least 40 words, informed by real research into your venue's location.
-        </div>
+        <div class="form-text">Must be at least 40 words.</div>
       </div>
 
       <div class="d-flex gap-2">

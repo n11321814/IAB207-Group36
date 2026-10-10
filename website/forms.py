@@ -7,7 +7,7 @@ from wtforms.fields import (
     SelectField, IntegerField, FloatField, DateField, TimeField, RadioField
 )
 from wtforms.validators import (
-    InputRequired, Length, Email, EqualTo, NumberRange, Optional
+    InputRequired, Length, Email, EqualTo, NumberRange, Optional, Regexp
 )
 
 # creates the login information
@@ -16,17 +16,31 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
- # this is the registration form
+# this is the registration form
 class RegisterForm(FlaskForm):
-    firstname = StringField("First Name", validators=[InputRequired()])
-    surname = StringField("Surname", validators=[InputRequired()])
+    firstname = StringField("First Name", validators=[
+        InputRequired(),
+        Length(max=50),
+        Regexp(r"^[A-Za-z'\- ]+$", message="Names can only contain letters, spaces, hyphens and apostrophes")
+    ])
+    surname = StringField("Surname", validators=[
+        InputRequired(),
+        Length(max=50),
+        Regexp(r"^[A-Za-z'\- ]+$", message="Names can only contain letters, spaces, hyphens and apostrophes")
+    ])
     email = StringField("Email Address", validators=[InputRequired(), Email("Please enter a valid email")])
-    contact_number = StringField("Contact Number", validators=[InputRequired()])
+    contact_number = StringField("Contact Number", validators=[
+        InputRequired(),
+        Regexp(r"^04\d{8}$", message="Enter a 10-digit mobile number starting with 04")
+    ])
     street_address = StringField("Street Address", validators=[InputRequired()])
 
     # linking two fields - password should be equal to data entered in confirm
-    password = PasswordField("Password", validators=[InputRequired(),
-                  EqualTo('confirm', message="Passwords should match")])
+    password = PasswordField("Password", validators=[
+        InputRequired(),
+        Length(min=6, message="Password must be at least 6 characters"),
+        EqualTo('confirm', message="Passwords should match")
+    ])
     confirm = PasswordField("Confirm Password", validators=[InputRequired()])
 
     # submit button
