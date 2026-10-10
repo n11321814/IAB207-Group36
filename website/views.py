@@ -236,3 +236,21 @@ def book_event(event_id):
 def my_bookings():
     orders = Order.query.filter_by(user_id=current_user.id).all()
     return render_template('bookings.html', orders=orders)
+
+
+
+@main_bp.route('/account/bookings/<int:order_id>/cancel', methods=['POST'])
+@login_required
+def cancel_booking(order_id):
+    order = Order.query.get_or_404(order_id)
+    if order.user_id != current_user.id:
+        abort(403)
+    event = order.event
+    if event.status != 'Cancelled':
+        event.tickets_remaining += order.quantity
+        if event.status == 'Sold Out':
+            event.status = 'Open'
+    db.session.delete(order)
+    db.session.commit()
+    flash('Booking cancelled - {} ticket(s) returned for {}.'.format(order.quantity, event.title), 'info')
+    return redirect(url_for('main.my_bookings'))

@@ -16,6 +16,7 @@
             <th>Booked On</th>
             <th>Session</th>
             <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -23,16 +24,24 @@
             <tr>
               <td>
                 <div class="d-flex align-items-center gap-3">
-                <img src="{{ order.event.poster_image or url_for('static', filename='img/no-poster.png') }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/no-poster.png') }}';" alt="{{ order.event.title }}" class="qs-thumb">
+                <img src="{{ order.event.poster_image or url_for('static', filename='img/no-poster.png') }}" alt="{{ order.event.title }}" class="qs-thumb">
                 {{ order.event.title }}
                 </div>
               </td>
               <td>{{ order.id }}</td>
               <td>{{ order.quantity }}</td>
               <td>{{ order.created_on_local.strftime('%d %b %Y %I:%M %p') }}</td>
-              <td>{{ order.event.event_date.strftime('%I:%M %p') }}, {{ order.event.start_time.strftime('%I:%M %p') }}</td>
+              <td>{{ order.event.event_date.strftime('%d %b %Y') }}, {{ order.event.start_time.strftime('%I:%M %p') }}</td>
               <td>
                 <span class="qs-badge qs-badge-{{ order.event.status.replace(' ', '').lower() }}">{{ order.event.status }}</span>
+              </td>
+              <td>
+                {% if order.event.status == 'Open' %}
+                <form method="POST" action="{{ url_for('main.cancel_booking', order_id=order.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+                </form>
+                {% endif %}
               </td>
             </tr>
           {% endfor %}

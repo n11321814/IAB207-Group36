@@ -15,7 +15,7 @@
 
     <div class="col-lg-7">
       <img
-        src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/no-poster.png') }}';"
+        src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}"
         class="img-fluid rounded mb-4"
         alt="{{ event.title }} screening poster"
       >
@@ -97,31 +97,6 @@
       {% if current_user.is_authenticated and current_user.id == event.organiser_id %}
       <a href="{{ url_for('main.update_event', event_id=event.id) }}" class="btn qs-btn-outline-gold w-100 mt-2">Edit Event</a>
       {% endif %}
-
-      <p class="qs-card-meta mt-4 mb-2 qs-text-xs qs-text-muted-warm"><em>This panel changes depending on the event's status. For example:</em></p>
-
-      <div class="qs-form-panel mb-3 py-3">
-        <div class="d-flex align-items-center gap-2">
-          <span class="qs-badge qs-badge-soldout">Sold Out</span>
-          <p class="mb-0 qs-card-meta">This screening is sold out - all tickets have been claimed. Check back for future screenings of this film.</p>
-        </div>
-      </div>
-
-      <div class="qs-form-panel mb-3 py-3">
-        <div class="d-flex align-items-center gap-2">
-          <span class="qs-badge qs-badge-inactive">Inactive</span>
-          <p class="mb-0 qs-card-meta">This screening has already taken place. Bookings are closed for past events.</p>
-        </div>
-      </div>
-
-      <div class="qs-form-panel mb-3 py-3">
-        <div class="d-flex align-items-center gap-2">
-          <span class="qs-badge qs-badge-cancelled">Cancelled</span>
-          <p class="mb-0 qs-card-meta">This screening was cancelled by the organiser. Any tickets purchased have been automatically refunded.</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 </main>
 
