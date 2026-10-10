@@ -4,7 +4,7 @@ from flask import request
 from . import db
 from .models import Event, Venue, Category, Order, Comment
 from .forms import EventForm, CommentForm, OrderForm
-from markupsafe import Markup
+from markupsafe import Markup, escape
 
 
 main_bp = Blueprint('main', __name__)
@@ -185,7 +185,10 @@ def book_event(event_id):
     form = OrderForm()
 
     if form.validate_on_submit():
-        event = Event.query.get_or_404(event_id)
+        if event.status != 'Open':
+            flash('This event is not open for bookings.', 'danger')
+            return redirect(url_for('main.event_details', event_id=event.id))
+
         remaining_tickets = event.tickets_remaining - form.quantity.data
         if remaining_tickets < 0:
             message = Markup("<strong>Order cannot be placed.</strong> You requested more tickets than are available for this session.")
@@ -194,7 +197,6 @@ def book_event(event_id):
             event.tickets_remaining = remaining_tickets
             if remaining_tickets == 0:
                 event.status = 'Sold Out'
-            db.session.flush()
 
             new_order = Order(
                 quantity=form.quantity.data,
@@ -204,7 +206,7 @@ def book_event(event_id):
             db.session.add(new_order)
             db.session.commit()
 
-            message = Markup(f"<strong>Booking confirmed!</strong> Order #{new_order.id} - {new_order.quantity} tickets for {event.title}. A confirmation has been sent to your email.")
+            message = Markup("<strong>Booking confirmed!</strong> Order #{} - {} tickets for {}. A confirmation has been sent to your email.").format(new_order.id, new_order.quantity, escape(event.title))
             flash(message, 'success')
 
     return redirect(url_for('main.event_details', event_id=event.id))
