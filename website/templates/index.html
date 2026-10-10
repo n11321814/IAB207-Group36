@@ -23,10 +23,17 @@
           <li class="nav-item"><a class="nav-link" href="{{ url_for('main.create_event') }}">Create an Event</a></li>
           {% if current_user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('main.my_bookings') }}">My Bookings</a></li>
-          <li class="nav-item"><span class="nav-link">Welcome, {{ current_user.firstname }}</span></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Hi, {{ current_user.firstname }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            </ul>
+          </li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register</a></li>
           {% endif %}
         </ul>
       </div>
@@ -165,7 +172,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="qs-card">
 
-          <img src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/no-poster.png') }}';" class="qs-card-img" alt="{{ event.title }} poster">
+          <img src="{{ event.poster_image or url_for('static', filename='img/no-poster.png') }}" class="qs-card-img" alt="{{ event.title }} poster">
           <div class="qs-card-body p-3">
 
             <div class="d-flex justify-content-between align-items-start mb-2">
@@ -209,11 +216,6 @@
 <footer class="qs-footer">
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     <p class="mb-2 mb-md-0">2026 Quirky Screenings.</p>
-    <div>
-      <a href="#" class="me-3">About Us</a>
-      <a href="#" class="me-3">Contact</a>
-      <a href="#" class="me-3">Terms</a>
-    </div>
   </div>
 </footer>
 
