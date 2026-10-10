@@ -38,7 +38,6 @@
               <td>
                 {% if order.event.status == 'Open' %}
                 <form method="POST" action="{{ url_for('main.cancel_booking', order_id=order.id) }}">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
                 </form>
                 {% endif %}
