@@ -14,9 +14,11 @@ from markupsafe import Markup, escape
 main_bp = Blueprint('main', __name__)
 
 def save_poster_upload(upload):
+
     """Save an uploaded poster file and return its URL path."""
     filename = f"{uuid.uuid4().hex[:8]}_{secure_filename(upload.filename)}"
     upload_dir = os.path.join(current_app.root_path, 'static', 'img', 'uploads')
+
     os.makedirs(upload_dir, exist_ok=True)
     upload.save(os.path.join(upload_dir, filename))
     return f"/static/img/uploads/{filename}"
@@ -56,20 +58,22 @@ def index():
     return render_template('index.html', events=events)
 
 @main_bp.route('/event/create', methods=['GET', 'POST'])
-@login_required  # only logged-in users can create events
+@login_required  # only logged in users can create events
 def create_event():
     form = EventForm()
 
     if form.validate_on_submit():
-        # reuse the venue if one with this name exists, otherwise create it
+        # reuse the venue if one with this name exists or create one
         venue = Venue.query.filter_by(name=form.venue_name.data).first()
+
         if venue is None:
             venue = Venue(name=form.venue_name.data, address=form.venue_address.data)
             db.session.add(venue)
-            db.session.flush()  # assigns venue.id so we can use it below
+            db.session.flush()  # assigns venue.id 
 
-        # an uploaded file beats a pasted URL if both are given
+        # an uploaded file has higher prio if both are given
         poster = form.poster_image.data
+
         if form.poster_upload.data:
             poster = save_poster_upload(form.poster_upload.data)
 
@@ -88,17 +92,19 @@ def create_event():
             tickets_available=form.tickets_available.data,
             tickets_remaining=form.tickets_available.data,
             acknowledgement_type=form.acknowledgement_type.data,
-            # only keep the text if the enhanced option was actually chosen
+            # only keep if enhanced option was actually chosen
             acknowledgement_text=form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None,
             category_id=form.category.data,
             organiser_id=current_user.id,
-            # new events always start as Open - status is never set by the user
+            # new events always start as opn
             status='Open',
         )
+
         db.session.add(new_event)
         db.session.commit()
 
         flash('Event published successfully.', 'success')
+
         return redirect(url_for('main.index'))
 
     return render_template('create_event.html', form=form)
@@ -106,6 +112,7 @@ def create_event():
 
 @main_bp.route('/event/<int:event_id>')
 def event_details(event_id):
+
     event = Event.query.get_or_404(event_id)
 
     comment_form = CommentForm() if current_user.is_authenticated else None
@@ -118,11 +125,11 @@ def event_details(event_id):
 def update_event(event_id):
     event = Event.query.get_or_404(event_id)
 
-    # only the organiser who created the event may edit it
+    # only the organiser who created event can edit
     if event.organiser_id != current_user.id:
         abort(403)
 
-    form = EventForm(obj=event)  # pre-fill the form with the existing details
+    form = EventForm(obj=event)  # prefill with existing details
 
     # venue and category need to be filled in manually on the first load
     if not form.is_submitted():
@@ -134,8 +141,10 @@ def update_event(event_id):
         event.title = form.title.data
         event.synopsis = form.synopsis.data
         event.poster_image = form.poster_image.data
+
         if form.poster_upload.data:
             event.poster_image = save_poster_upload(form.poster_upload.data)
+
         event.classification = form.classification.data
         event.runtime = form.runtime.data
         event.screening_format = form.screening_format.data
@@ -145,15 +154,15 @@ def update_event(event_id):
         event.ticket_price = form.ticket_price.data
         event.category_id = form.category.data
         event.acknowledgement_type = form.acknowledgement_type.data
-        event.acknowledgement_text = (
-            form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None
-        )
+        event.acknowledgement_text = (form.acknowledgement_text.data if form.acknowledgement_type.data == 'enhanced' else None)
 
         event.venue.name = form.venue_name.data
         event.venue.address = form.venue_address.data
 
         db.session.commit()
+
         flash('Event updated successfully.', 'success')
+
         return redirect(url_for('main.index'))
 
     return render_template('create_event.html', form=form, editing=True, event=event)
@@ -164,14 +173,15 @@ def update_event(event_id):
 def cancel_event(event_id):
     event = Event.query.get_or_404(event_id)
 
-    # only the organiser who created the event may cancel it
+    # only the organiser Can cancel
     if event.organiser_id != current_user.id:
-        abort(403)
+        abort(404)
 
     event.status = 'Cancelled'
     db.session.commit()
 
     flash('Event has been cancelled.', 'info')
+
     return redirect(url_for('main.index'))
 
 @main_bp.route('/event/<int:event_id>/comment', methods=['POST'])

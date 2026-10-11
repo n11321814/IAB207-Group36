@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Create an Event - Quirky Screenings{% endblock %}
+
+{% block title %}{{ 'Update Event' if editing else 'Create an Event' }} - Quirky Screenings{% endblock %}
 
 {% block content %}
 <main class="container py-5">
@@ -10,142 +11,109 @@
       {{ form.hidden_tag() }}
 
       <h2 class="qs-heading h5 mb-3">Film Details</h2>
+
       <div class="row g-3 mb-4">
         <div class="col-md-8">
-          {{ form.title.label(class="form-label") }}
-          {{ form.title(class="form-control") }}
-          {% for error in form.title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}
+          {% for err in form.title.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.classification.label(class="form-label") }}
-          {{ form.classification(class="form-select") }}
-          {% for error in form.classification.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.classification.label(class="form-label") }} {{ form.classification(class="form-select") }}
+          {% for err in form.classification.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-12">
-          {{ form.synopsis.label(class="form-label") }}
-          {{ form.synopsis(class="form-control", rows=4) }}
-          {% for error in form.synopsis.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.synopsis.label(class="form-label") }} {{ form.synopsis(class="form-control", rows=4) }}
+          {% for err in form.synopsis.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.runtime.label(class="form-label") }}
-          {{ form.runtime(class="form-control") }}
-          {% for error in form.runtime.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.runtime.label(class="form-label") }} {{ form.runtime(class="form-control") }}
+          {% for err in form.runtime.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.screening_format.label(class="form-label") }}
-          {{ form.screening_format(class="form-select") }}
-          {% for error in form.screening_format.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.screening_format.label(class="form-label") }} {{ form.screening_format(class="form-select") }}
+          {% for err in form.screening_format.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.category.label(class="form-label") }}
-          {{ form.category(class="form-select") }}
-          {% for error in form.category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.category.label(class="form-label") }} {{ form.category(class="form-select") }}
+          {% for err in form.category.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-12">
-          {{ form.poster_image.label(class="form-label") }}
-          {{ form.poster_image(class="form-control") }}
-          {% for error in form.poster_image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.poster_image.label(class="form-label") }} {{ form.poster_image(class="form-control") }}
+          {% for err in form.poster_image.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
           <div class="form-text">Paste a link to an image of the film poster.</div>
         </div>
         <div class="col-12">
-          {{ form.poster_upload.label(class="form-label") }}
-          {{ form.poster_upload(class="form-control") }}
-          {% for error in form.poster_upload.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.poster_upload.label(class="form-label") }} {{ form.poster_upload(class="form-control") }}
+          {% for err in form.poster_upload.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
           <div class="form-text">Images only: PNG or JPG.</div>
         </div>
       </div>
 
       <h2 class="qs-heading h5 mb-3">Venue & Session</h2>
+
       <div class="row g-3 mb-4">
         <div class="col-md-6">
-          {{ form.venue_name.label(class="form-label") }}
-          {{ form.venue_name(class="form-control") }}
-          {% for error in form.venue_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.venue_name.label(class="form-label") }} {{ form.venue_name(class="form-control") }}
+          {% for err in form.venue_name.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-6">
-          {{ form.venue_address.label(class="form-label") }}
-          {{ form.venue_address(class="form-control") }}
-          {% for error in form.venue_address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.venue_address.label(class="form-label") }} {{ form.venue_address(class="form-control") }}
+          {% for err in form.venue_address.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.event_date.label(class="form-label") }}
-          {{ form.event_date(class="form-control") }}
-          {% for error in form.event_date.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.event_date.label(class="form-label") }} {{ form.event_date(class="form-control") }}
+          {% for err in form.event_date.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.start_time.label(class="form-label") }}
-          {{ form.start_time(class="form-control") }}
-          {% for error in form.start_time.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.start_time.label(class="form-label") }} {{ form.start_time(class="form-control") }}
+          {% for err in form.start_time.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-4">
-          {{ form.end_time.label(class="form-label") }}
-          {{ form.end_time(class="form-control") }}
-          {% for error in form.end_time.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.end_time.label(class="form-label") }} {{ form.end_time(class="form-control") }}
+          {% for err in form.end_time.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
       </div>
 
       <h2 class="qs-heading h5 mb-3">Tickets</h2>
+
       <div class="row g-3 mb-4">
         <div class="col-md-6">
-          {{ form.ticket_price.label(class="form-label") }}
-          {{ form.ticket_price(class="form-control") }}
-          {% for error in form.ticket_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.ticket_price.label(class="form-label") }} {{ form.ticket_price(class="form-control") }}
+          {% for err in form.ticket_price.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
         <div class="col-md-6">
-          {{ form.tickets_available.label(class="form-label") }}
-          {{ form.tickets_available(class="form-control") }}
-          {% for error in form.tickets_available.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          {{ form.tickets_available.label(class="form-label") }} {{ form.tickets_available(class="form-control") }}
+          {% for err in form.tickets_available.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         </div>
       </div>
 
       <h2 class="qs-heading h5 mb-3">Acknowledgement of Country</h2>
-      <div class="qs-form-panel mb-3 py-3 bg-opacity-25" style="background-color: rgba(204,161,22,0.08);">
-        <p class="mb-2"><strong>What's the difference?</strong> A <em>Welcome to Country</em> can only be delivered by a Traditional Owner or Elder of that specific land. An <em>Acknowledgement of Country</em> can be given by anyone, and is a statement of respect for the Traditional Custodians of the land an event takes place on.</p>
-        <p class="mb-2"><strong>Avoid common mistakes:</strong> a generic, copy pasted line with no connection to the actual venue is the most common criticism of Acknowledgements. Naming the correct Traditional Owner group, and using "Traditional Owners/Custodians" rather than "landowners", are both simple ways to make yours genuine rather than tokenistic.</p>
-                <p class="mb-2"><strong>Traditional Custodians of the Australian capital cities:</strong> Canberra (Ngunnawal) Sydney (Gadigal), Melbourne (Wurundjeri), Brisbane (Turrbal and Yuggera), Perth (Whadjuk), Adelaide (Kaurna), Hobart (muwinina), Darwin (Larrakia). Overlapping and contested claims exist in some areas, check the specific location.</p>
-        <p class="mb-0">Not sure which group is connected to your venue's land? Check the <a href="https://aiatsis.gov.au/explore/map-indigenous-australia" target="_blank" class="qs-btn-outline-gold" style="text-decoration:underline;">AIATSIS Map of Indigenous Australia</a> before writing an Enhanced Acknowledgement below.</p>
+      <div class="qs-form-panel mb-3 py-3 bg-opacity-25" style="background-color: rgba(209, 165, 21, 0.08);">
+        <p class="mb-2"><strong>Tip:</strong> Ensure your acknowledgement names the local Traditional Owner group, not just using generic terms. You can cross reference land groups here: <a href="https://aiatsis.gov.au/explore/map-indigenous-australia" target="_blank" class="underline">AIATSIS Map</a>.</p>
       </div>
 
       <div class="mb-3">
         {% for subfield in form.acknowledgement_type %}
-        <div class="form-check">
-          {{ subfield(class="form-check-input") }}
-          {{ subfield.label(class="form-check-label") }}
-        </div>
+          <div class="form-check">
+            {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+          </div>
         {% endfor %}
       </div>
 
       <div class="mb-4">
         {{ form.acknowledgement_text.label(class="form-label") }}
-        {{ form.acknowledgement_text(
-            class="form-control",
-            rows=4,
-            placeholder="Consider naming the Traditional Owner group for your venue's area, paying respect to Elders, and connecting your screening to a local story or cause."
-        ) }}
-
-        {% for error in form.acknowledgement_text.errors %}
-          <div class="text-danger small">{{ error }}</div>
-        {% endfor %}
-
+        {{ form.acknowledgement_text(class="form-control", rows= 4, placeholder="Consider Acknowledging the Traditional Custodians of the land where your venue is located or Traditional connection this screening may have") }}
+        {% for err in form.acknowledgement_text.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
         <div class="form-text">Must be at least 40 words.</div>
       </div>
 
       <div class="d-flex gap-2">
-        {{ form.submit(
-            class="btn qs-btn-gold px-4",
-            value=('Update Event' if editing else 'Publish Event')
-        ) }}
-
+        {{ form.submit(class="btn qs-btn-gold px-4", value=('Update Event' if editing else 'Publish Event')) }}
         {% if editing %}
-        <button type="button"
-                class="btn btn-outline-danger px-4"
-                data-bs-toggle="modal"
-                data-bs-target="#cancelEventModal">
-          Cancel Event
-        </button>
+          <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal" data-bs-target="#cancelEventModal">Cancel Event</button>
         {% endif %}
-      </div>
 
+      </div>
     </form>
   </div>
 </main>
@@ -154,37 +122,23 @@
 <div class="modal fade" id="cancelEventModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content qs-form-panel">
-
       <div class="modal-header border-0">
-        <h2 class="modal-title qs-heading h5">
-          Cancel this screening?
-        </h2>
 
-        <button type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal"
-                aria-label="Close">
-        </button>
+        <h2 class="modal-title qs-heading h5">Cancel this screening?</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
       </div>
-
       <div class="modal-body">
-        <p>
-          This will mark the event as Cancelled and disable new bookings.
-        </p>
 
-        <form method="POST"
-              action="{{ url_for('main.cancel_event', event_id=event.id) }}">
-
-          <button type="submit" class="btn btn-danger w-100">
-            Confirm Cancellation
-          </button>
-
+        <p>This will mark the event as cancelled and prevent new bookings.</p>
+        <form method="POST" action="{{ url_for('main.cancel_event', event_id=event.id) }}">
+          <button type="submit" class="btn btn-danger w-100">Confirm Cancellation</button>
         </form>
 
       </div>
-
     </div>
   </div>
+
 </div>
 {% endif %}
 
