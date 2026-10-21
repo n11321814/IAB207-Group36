@@ -1,12 +1,13 @@
 from datetime import date
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import (
     SubmitField, StringField, PasswordField, TextAreaField,
     SelectField, IntegerField, FloatField, DateField, TimeField, RadioField
 )
 from wtforms.validators import (
-    InputRequired, Length, Email, EqualTo, NumberRange, Optional
+    InputRequired, Length, Email, EqualTo, NumberRange, Optional, Regexp
 )
 
 # creates the login information
@@ -15,42 +16,59 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
- # this is the registration form
+# this is the registration form
 class RegisterForm(FlaskForm):
-    firstname = StringField("First Name", validators=[InputRequired()])
-    surname = StringField("Surname", validators=[InputRequired()])
+    firstname = StringField("First Name", validators=[
+        InputRequired(),
+        Length(max=50),
+        Regexp(r"^[A-Za-z'\- ]+$", message="Names can only contain letters, spaces, hyphens and apostrophes")
+    ])
+    surname = StringField("Surname", validators=[
+        InputRequired(),
+        Length(max=50),
+        Regexp(r"^[A-Za-z'\- ]+$", message="Names can only contain letters, spaces, hyphens and apostrophes")
+    ])
     email = StringField("Email Address", validators=[InputRequired(), Email("Please enter a valid email")])
-    contact_number = StringField("Contact Number", validators=[InputRequired()])
+    contact_number = StringField("Contact Number", validators=[
+        InputRequired(),
+        Regexp(r"^04\d{8}$", message="Enter a 10-digit mobile number starting with 04")
+    ])
     street_address = StringField("Street Address", validators=[InputRequired()])
 
     # linking two fields - password should be equal to data entered in confirm
-    password = PasswordField("Password", validators=[InputRequired(),
-                  EqualTo('confirm', message="Passwords should match")])
+    password = PasswordField("Password", validators=[
+        InputRequired(),
+        Length(min=6, message="Password must be at least 6 characters"),
+        EqualTo('confirm', message="Passwords should match")
+    ])
     confirm = PasswordField("Confirm Password", validators=[InputRequired()])
 
     # submit button
     submit = SubmitField("Register")
 
-# form for creating and updating an event, with server-side validation
+# for creating and updating an event
 class EventForm(FlaskForm):
+
     title = StringField('Film title', validators=[InputRequired(), Length(max=150)])
+
     classification = SelectField(
         'Classification',
-        choices=[('', 'Select...'), ('G', 'G'), ('PG', 'PG'), ('M', 'M'),
-                 ('MA15+', 'MA15+'), ('R18+', 'R18+')],
-        validators=[InputRequired()]
-    )
-    synopsis = TextAreaField('Synopsis', validators=[InputRequired(), Length(max=2000)])
+        choices=[('', 'Select...'), ('G', 'G'), ('PG', 'PG'), ('M', 'M'), ('MA15+', 'MA15+'), ('R18+', 'R18+')], # Aus classifications
+        validators=[InputRequired()])
+    
+    synopsis = TextAreaField('Synopsis', validators=[InputRequired(), Length(max=2500)])
     runtime = IntegerField('Runtime (minutes)', validators=[InputRequired(), NumberRange(min=1)])
     screening_format = SelectField(
         'Screening format',
         choices=[('Digital', 'Digital'), ('35mm', '35mm'), ("Director's Cut", "Director's Cut")]
     )
-    category = SelectField('Category', coerce=int, validators=[InputRequired()])
-    poster_image = StringField('Poster image URL', validators=[Optional(), Length(max=300)])
 
-    venue_name = StringField('Venue name', validators=[InputRequired(), Length(max=100)])
-    venue_address = StringField('Venue address', validators=[InputRequired(), Length(max=200)])
+    category = SelectField('Category', coerce=int, validators=[InputRequired()])
+    poster_image = StringField('Poster image URL', validators=[Optional(), Length(max=310)])
+    poster_upload = FileField('Or upload a poster file', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], 'Images only (JPG or PNG)')])
+
+    venue_name = StringField('Venue name', validators=[InputRequired(), Length(max=150)])
+    venue_address = StringField('Venue address', validators=[InputRequired(), Length(max=250)])
     event_date = DateField('Date', validators=[InputRequired()])
     start_time = TimeField('Start time', validators=[InputRequired()])
     end_time = TimeField('End time', validators=[InputRequired()])
@@ -60,18 +78,12 @@ class EventForm(FlaskForm):
 
     acknowledgement_type = RadioField(
         'Acknowledgement of Country',
-        choices=[('none', 'No Acknowledgement'),
-                 ('generic', 'Generic Acknowledgement'),
-                 ('enhanced', 'Enhanced Acknowledgement')],
+        choices=[('none', 'No Acknowledgement'), ('generic', 'Generic Acknowledgement'), ('enhanced', 'Enhanced Acknowledgement')],
         default='generic',
-        validators=[InputRequired()]
-    )
+        validators=[InputRequired()])
 
-    # Acknowledgement of Country guidance informed by:
-    # - Reconciliation Australia's protocol guidance on Acknowledgement of Country
-    # - AIATSIS Map of Indigenous Australia (aiatsis.gov.au/explore/map-indigenous-australia)
-    # - Shelley Reys, "Deliver an Acknowledgement of Country that really means
-    #   something" (TEDxSydney) — linked in the A2 brief
+    # Acknowledgement of Country guidance informed by ceconciliation Australia's protocol guidance on Acknowledgement of Country
+    # AIATSIS Map of Indigenous Australia, Shelley Reys "Deliver an Acknowledgement of Country that really means something" (TEDxSydney
     acknowledgement_text = TextAreaField(
         'Your Enhanced Acknowledgement (only used if "Enhanced" is selected above)',
         validators=[Optional(), Length(max=1500)]
@@ -112,3 +124,7 @@ class CommentForm(FlaskForm):
     content = TextAreaField('Add a Comment', validators=[InputRequired(), Length(min=5, max=2000)])
 
     submit = SubmitField('Post Comment')
+
+class OrderForm(FlaskForm):
+    quantity = IntegerField('Number of tickets', validators=[InputRequired(), NumberRange(min=1)])
+    submit = SubmitField('Confirm Booking')

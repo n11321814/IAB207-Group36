@@ -162,8 +162,9 @@ body.qs-body{
   color: #fdfdfc;
   border-color: #cca116;
 }
-.qs-form-panel .form-text{
+.qs-form-panel .form-control::placeholder{
   color: #a5a098;
+  opacity: 1;
 }
 
 /* Buttons */
