@@ -1,7 +1,8 @@
 import os
 import uuid
 
-from flask import Blueprint, render_template, redirect, url_for, flash, abort, request, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, abort, request, current_app, g
+
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
@@ -9,7 +10,9 @@ from . import db
 from .models import Event, Venue, Category, Order, Comment
 from .forms import EventForm, CommentForm, OrderForm
 from markupsafe import Markup, escape
-
+from sentence_transformers import SentenceTransformer
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 main_bp = Blueprint('main', __name__)
 
@@ -54,6 +57,26 @@ def index():
         events = events.order_by(Event.event_date.desc())
 
     events = events.all()
+
+    # If no keyword results, trigger semantic search
+    if not events and title:
+        # Precompute vectors only once (on page load)
+        if not hasattr(g, 'event_vectors'):
+            # Compute vectors for all events
+            event_texts = [f"{e.title} {e.synopsis}" for e in Event.query.all()]
+            model = SentenceTransformer('all-MiniLM-L6-v2')
+            g.event_vectors = model.encode(event_texts).tolist()
+
+        # Perform semantic search
+        query_vector = model.encode(title).reshape(1, -1)
+        similarities = cosine_similarity(query_vector, np.array(g.event_vectors)).flatten()
+        top_indices = np.argsort(similarities)[::-1]  # Sort descending
+
+        # Filter by similarity threshold
+        semantic_results = [Event.query.all()[i] for i in top_indices if similarities[i] > 0.3]
+
+        # Replace events with semantic results
+        events = semantic_results
 
     return render_template('index.html', events=events)
 
