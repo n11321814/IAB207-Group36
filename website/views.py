@@ -85,6 +85,11 @@ def index():
 def create_event():
     form = EventForm()
 
+    # save uploaded image path in URL field for rerendered form
+    upload = form.poster_upload.data
+    if request.method == 'POST' and upload and upload.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
+        form.poster_image.data = save_poster_upload(upload)
+
     if form.validate_on_submit():
         # reuse the venue if one with this name exists or create one
         venue = Venue.query.filter_by(name=form.venue_name.data).first()
@@ -96,9 +101,6 @@ def create_event():
 
         # an uploaded file has higher prio if both are given
         poster = form.poster_image.data
-
-        if form.poster_upload.data:
-            poster = save_poster_upload(form.poster_upload.data)
 
         new_event = Event(
             title=form.title.data,
@@ -154,6 +156,11 @@ def update_event(event_id):
 
     form = EventForm(obj=event)  # prefill with existing details
 
+    # same as create, keep a new upload if form fails validation
+    upload = form.poster_upload.data
+    if request.method == 'POST' and upload and upload.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
+        form.poster_image.data = save_poster_upload(upload)
+
     # venue and category need to be filled in manually on the first load
     if not form.is_submitted():
         form.venue_name.data = event.venue.name
@@ -164,10 +171,6 @@ def update_event(event_id):
         event.title = form.title.data
         event.synopsis = form.synopsis.data
         event.poster_image = form.poster_image.data
-
-        if form.poster_upload.data:
-            event.poster_image = save_poster_upload(form.poster_upload.data)
-
         event.classification = form.classification.data
         event.runtime = form.runtime.data
         event.screening_format = form.screening_format.data

@@ -131,6 +131,13 @@ body.qs-body{
 .qs-badge-inactive{ background-color: #3f3e3e; color: #d9d9d9; }
 .qs-badge-cancelled{ background-color: #130808; color: #ecacac; }
 
+/* larger status badge for the event details page */
+.qs-badge-lg{
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  display: inline-block;
+}
+
 /* Section headings */
 .qs-section-title{
   font-family: 'Oswald', sans-serif;
@@ -263,4 +270,15 @@ body.qs-body{
 .qs-empty-icon{
   font-size: 2.5rem;
   color: #8f8880;
+}
+
+.form-text{
+  color: #cecbc4;
+}
+
+/* grey out  booking button while ticket quantity is invalid */
+.qs-booking-form:has(input[type="number"]:invalid) input[type="submit"]{
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
 }

@@ -103,6 +103,11 @@ class EventForm(FlaskForm):
         if not super().validate(extra_validators=extra_validators):
             return False
 
+        # a poster is required, either a link or uploaded file
+        if not self.poster_image.data and not self.poster_upload.data:
+            self.poster_image.errors.append('Please add a poster, either a link or an uploaded file.')
+            return False
+
         # event date must be in the future (per brief FAQ)
         if self.event_date.data and self.event_date.data < date.today():
             self.event_date.errors.append('Event date must be in the future.')
