@@ -40,7 +40,11 @@
         <div class="col-12">
           {{ form.poster_image.label(class="form-label") }} {{ form.poster_image(class="form-control") }}
           {% for err in form.poster_image.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
-          <div class="form-text">Paste a link to an image of the film poster.</div>
+          <div class="form-text">Paste a link to an image of the film poster, or upload a file below. One is required.</div>
+          {% if form.poster_image.data %}
+            <img src="{{ form.poster_image.data }}" alt="Selected poster" class="qs-thumb mt-2">
+            <div class="form-text">Current poster kept. Upload a new file to replace it.</div>
+          {% endif %}
         </div>
         <div class="col-12">
           {{ form.poster_upload.label(class="form-label") }} {{ form.poster_upload(class="form-control") }}
