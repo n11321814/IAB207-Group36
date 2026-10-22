@@ -62,26 +62,6 @@ EVENTS = [
         'acknowledgement_type': 'generic'
     },
     {
-        'title': 'Amélie', 'day': 8, 'organiser': CUR,
-        'venue': 'New Farm Cinemas', 'category': 'Arthouse & Independent',
-        'synopsis': 'A shy Parisian waitress secretly improves the lives of those around her.',
-        'poster_image': None,
-        'classification': 'M', 'runtime': 122, 'screening_format': 'Digital',
-        'start_time': time(18, 0), 'end_time': time(20, 5),
-        'ticket_price': 12.00, 'tickets_available': 45,
-        'acknowledgement_type': 'generic'
-    },
-    {
-        'title': 'The Rocky Horror Picture Show', 'day': 2, 'organiser': CUR,
-        'venue': 'The Tivoli', 'category': 'Cult Classic',
-        'synopsis': 'The midnight movie to end all midnight movies. Costumes and audience participation encouraged.',
-        'poster_image': None,
-        'classification': 'MA15+', 'runtime': 100, 'screening_format': '35mm',
-        'start_time': time(21, 0), 'end_time': time(22, 45),
-        'ticket_price': 16.00, 'tickets_available': 80,
-        'acknowledgement_type': 'enhanced', 'acknowledgement_text': AOC_TIVOLI
-    },
-    {
         'title': 'Pulp Fiction', 'day': 7, 'organiser': ORG,
         'venue': 'The Tivoli', 'category': 'Cult Classic',
         'synopsis': 'Hitmen, a boxer, a briefcase and a very good milkshake.',
@@ -102,16 +82,6 @@ EVENTS = [
         'acknowledgement_type': 'enhanced', 'acknowledgement_text': AOC_GOMA
     },
     {
-        'title': 'Parasite', 'day': 9, 'organiser': CUR,
-        'venue': 'New Farm Cinemas', 'category': 'Foreign Language',
-        'synopsis': 'Bong Joon-ho\'s Palme d\'Or and Oscar winner about a struggling family.',
-        'poster_image': None,
-        'classification': 'MA15+', 'runtime': 132, 'screening_format': 'Digital',
-        'start_time': time(19, 30), 'end_time': time(21, 45),
-        'ticket_price': 13.00, 'tickets_available': 50,
-        'acknowledgement_type': 'generic'
-    },
-    {
         'title': 'Free Solo', 'day': 10, 'organiser': ORG,
         'venue': 'GOMA Cinema', 'category': 'Documentary',
         'synopsis': 'Alex Honnold attempts the first rope-free climb of El Capitan.',
@@ -122,34 +92,14 @@ EVENTS = [
         'acknowledgement_type': 'none'
     },
     {
-        'title': '20 Feet from Stardom', 'day': 11, 'organiser': CUR,
-        'venue': 'New Farm Cinemas', 'category': 'Documentary',
-        'synopsis': 'The backup singers behind the biggest hits finally take centre stage.',
-        'poster_image': None,
-        'classification': 'M', 'runtime': 91, 'screening_format': 'Digital',
-        'start_time': time(18, 30), 'end_time': time(20, 5),
-        'ticket_price': 9.00, 'tickets_available': 40,
-        'acknowledgement_type': 'generic'
-    },
-    {
         'title': "Singin' in the Rain", 'day': 12, 'organiser': ORG,
         'venue': 'The Tivoli', 'category': 'Musicals',
         'synopsis': 'Hollywood\'s bumpy transition to sound, immortalised in a classic musical.',
-        'poster_image': '/static/img/singin-in-the-rain.jpg',
+        'poster_image': '/static/img/singin-in-the-rain.png',
         'classification': 'G', 'runtime': 103, 'screening_format': '35mm',
         'start_time': time(16, 0), 'end_time': time(17, 50),
         'ticket_price': 11.00, 'tickets_available': 60,
-        'acknowledgement_type': 'generic'
-    },
-    {
-        'title': 'Moulin Rouge!', 'day': 18, 'organiser': CUR,
-        'venue': 'Lumen Room', 'category': 'Musicals',
-        'synopsis': 'Baz Luhrmann\'s jukebox spectacular in turn-of-the-century Paris.',
-        'poster_image': None,
-        'classification': 'M', 'runtime': 127, 'screening_format': 'Digital',
-        'start_time': time(19, 0), 'end_time': time(21, 10),
-        'ticket_price': 14.00, 'tickets_available': 70,
-        'status': 'Cancelled',
+        'tickets_remaining': 0, 'status': 'Cancelled',
         'acknowledgement_type': 'generic'
     },
     {
@@ -163,23 +113,12 @@ EVENTS = [
         'tickets_remaining': 0, 'status': 'Sold Out',
         'acknowledgement_type': 'generic'
     },
-    {
-        'title': 'The Matrix', 'day': 16, 'organiser': CUR,
-        'venue': 'Lumen Room', 'category': 'Blockbuster',
-        'synopsis': 'A hacker learns reality is not what it seems. Take the red pill.',
-        'poster_image': None,
-        'classification': 'M', 'runtime': 136, 'screening_format': 'Digital',
-        'start_time': time(20, 0), 'end_time': time(22, 20),
-        'ticket_price': 13.00, 'tickets_available': 100,
-        'acknowledgement_type': 'generic'
-    },
 ]
 
 COMMENTS = [
     {'user': PAT, 'event': 'Spirited Away', 'content': 'This is going to be unreal.'},
     {'user': ORG, 'event': 'Spirited Away', 'content': 'Doors open 30 minutes before the session.'},
     {'user': PAT, 'event': 'Pulp Fiction', 'content': 'First time seeing this on 35mm. Cannot wait.'},
-    {'user': PAT, 'event': 'The Rocky Horror Picture Show', 'content': 'Is audience participation encouraged?'},
     {'user': CUR, 'event': 'The Grand Budapest Hotel', 'content': 'Perfection on the big screen.'},
 ]
 
