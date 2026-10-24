@@ -10,11 +10,27 @@ from . import db
 from .models import Event, Venue, Category, Order, Comment
 from .forms import EventForm, CommentForm, OrderForm
 from markupsafe import Markup, escape
-from sentence_transformers import SentenceTransformer
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
+
+from datetime import date
+
+# semantic search is optional, so the app can falls back to keyword search if packages aren't met
+try:
+    from sentence_transformers import SentenceTransformer
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+    SEMANTIC_SEARCH = True
+except ImportError:
+    SEMANTIC_SEARCH = False
 
 main_bp = Blueprint('main', __name__)
+
+def mark_past_events_inactive():
+    # events whose date has passed become Inactive so they can no longer be booked
+    past_events = Event.query.filter(Event.event_date < date.today(), Event.status.in_(['Open', 'Sold Out'])).all()
+    for event in past_events:
+        event.status = 'Inactive'
+    if past_events:
+        db.session.commit()
 
 def save_poster_upload(upload):
 
@@ -28,6 +44,7 @@ def save_poster_upload(upload):
 
 @main_bp.route('/')
 def index():
+    mark_past_events_inactive()
     title = request.args.get('title', '').strip()
     category = request.args.get('category', '').strip()
     sort = request.args.get('sort', 'newest')
@@ -59,7 +76,7 @@ def index():
     events = events.all()
 
     # If no keyword results, trigger semantic search
-    if not events and title:
+    if not events and title and SEMANTIC_SEARCH:
         # Precompute vectors only once (on page load)
         if not hasattr(g, 'event_vectors'):
             # Compute vectors for all events
@@ -137,7 +154,7 @@ def create_event():
 
 @main_bp.route('/event/<int:event_id>')
 def event_details(event_id):
-
+    mark_past_events_inactive()
     event = Event.query.get_or_404(event_id)
 
     comment_form = CommentForm() if current_user.is_authenticated else None
@@ -234,6 +251,7 @@ def comment_event(event_id):
 @main_bp.route('/event/<int:event_id>/book', methods=['POST'])
 @login_required
 def book_event(event_id):
+    mark_past_events_inactive()
     event = Event.query.get_or_404(event_id)
 
     form = OrderForm()
