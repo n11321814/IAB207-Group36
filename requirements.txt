@@ -1,3 +1,5 @@
+ # core packages needed to run the app, for the optional AI semantic search, also install requirements-ai.txt
+
 blinker==1.9.0
 click==8.5.0
 dnspython==2.8.0
