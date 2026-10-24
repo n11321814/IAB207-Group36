@@ -82,7 +82,7 @@ EVENTS = [
         'acknowledgement_type': 'enhanced', 'acknowledgement_text': AOC_GOMA
     },
     {
-        'title': 'Free Solo', 'day': 10, 'organiser': ORG,
+        'title': 'Free Solo', 'day': -3, 'organiser': ORG,
         'venue': 'GOMA Cinema', 'category': 'Documentary',
         'synopsis': 'Alex Honnold attempts the first rope-free climb of El Capitan.',
         'poster_image': '/static/img/free-solo.jpg',

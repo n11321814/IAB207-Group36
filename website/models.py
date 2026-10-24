@@ -1,7 +1,16 @@
 from . import db
-from datetime import datetime
+
+from datetime import datetime, timedelta, timezone
 from flask_login import UserMixin
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+
+def brisbane_now():
+    #  fall back to a fixed UTC+10 offset if tzdata package is missing
+    try:
+        return datetime.now(ZoneInfo("Australia/Brisbane"))
+    except ZoneInfoNotFoundError:
+        return datetime.now(timezone(timedelta(hours=10)))
 
 # inherits from db.Model to create a user model for the database
 class User(db.Model, UserMixin):
@@ -61,7 +70,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     content = db.Column(db.Text, nullable=False)
-    posted_on = db.Column(db.DateTime, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")))
+    posted_on = db.Column(db.DateTime, default=brisbane_now)
     
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -80,7 +89,7 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     created_on = db.Column(db.DateTime, default=datetime.utcnow)
-    created_on_local = db.Column(db.DateTime, default=lambda: datetime.now(ZoneInfo("Australia/Brisbane")))
+    created_on_local = db.Column(db.DateTime, default=brisbane_now)
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders')

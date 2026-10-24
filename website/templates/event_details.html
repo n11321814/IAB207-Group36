@@ -33,9 +33,16 @@
         <li class="mb-2"><strong class="text-warning">Venue:</strong> {{ event.venue.name }}, {{ event.venue.address }}</li>
         <li class="mb-2"><strong class="text-warning">Date & Time:</strong> {{ event.event_date }}, {{ event.start_time }} – {{ event.end_time }}</li>
         <li class="mb-2"><strong class="text-warning">Ticket Price:</strong> ${{ "%.2f"|format(event.ticket_price) }}</li>
-        <li class="mb-2"><strong class="text-warning">Acknowledgement of Country:</strong> {% if event.acknowledgement_text %}{{ event.acknowledgement_text }}{% else %}None specified{% endif %}</li>
         <li class="mb-2"><strong class="text-warning">Organised by:</strong> {{ event.organiser.firstname }} {{ event.organiser.surname }}</li>
       </ul>
+
+      {% if event.acknowledgement_type == 'enhanced' and event.acknowledgement_text %}
+        <h2 class="qs-section-title qs-heading h5 mt-4">Acknowledgement of Country</h2>
+        <p>{{ event.acknowledgement_text }}</p>
+      {% elif event.acknowledgement_type == 'generic' %}
+        <h2 class="qs-section-title qs-heading h5 mt-4">Acknowledgement of Country</h2>
+        <p>We acknowledge the Traditional Custodians of the land on which this screening takes place, and pay our respects to their Elders past and present.</p>
+      {% endif %}
 
       <div class="ratio ratio-16x9 mb-4">
         <iframe src="https://www.google.com/maps?q={{ event.venue.address|urlencode }}&output=embed" style="border:0;" allowfullscreen loading="lazy"></iframe>
